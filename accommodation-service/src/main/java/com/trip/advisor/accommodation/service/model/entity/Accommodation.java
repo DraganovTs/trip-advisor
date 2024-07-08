@@ -1,6 +1,6 @@
 package com.trip.advisor.accommodation.service.model.entity;
 
-import com.trip.advisor.accommodation.service.model.entity.enums.AccommodationType;
+import com.trip.advisor.accommodation.service.model.enums.AccommodationType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

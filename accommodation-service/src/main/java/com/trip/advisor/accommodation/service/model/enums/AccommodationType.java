@@ -1,4 +1,4 @@
-package com.trip.advisor.accommodation.service.model.entity.enums;
+package com.trip.advisor.accommodation.service.model.enums;
 
 
 public enum AccommodationType {
