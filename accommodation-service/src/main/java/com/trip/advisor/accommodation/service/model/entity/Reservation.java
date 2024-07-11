@@ -2,7 +2,7 @@ package com.trip.advisor.accommodation.service.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -13,23 +13,21 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "accommodation_id", nullable = false)
-    private Accommodation accommodation;
-
+    @NotEmpty
+    private Long accommodationId;
     private LocalDate startDate;
     private LocalDate endDate;
-    @NotNull
+    @NotEmpty(message = "guest name must be not empty")
     @Size(min = 3, max = 20)
     private String guestName;
-    @NotNull
-    @Email
+    @NotEmpty(message = "email must be not empty")
+    @Email(message = "email must be valid")
     private String guestEmail;
 }

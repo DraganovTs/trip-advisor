@@ -1,20 +1,18 @@
 package com.trip.advisor.accommodation.service.model.dto;
 
-import com.trip.advisor.accommodation.service.model.entity.Address;
-import com.trip.advisor.accommodation.service.model.entity.Reservation;
-import com.trip.advisor.accommodation.service.model.enums.AccommodationType;
-import jakarta.persistence.*;
+
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AccommodationDTO {
 
     @Size(min = 2,max = 20)
@@ -29,4 +27,5 @@ public class AccommodationDTO {
     private AddressDTO address;
 
     private List<ReservationDTO> reservations;
+
 }

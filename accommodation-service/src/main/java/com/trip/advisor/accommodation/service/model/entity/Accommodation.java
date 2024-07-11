@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Accommodation extends BaseEntity {
@@ -22,7 +23,7 @@ public class Accommodation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long accommodationId;
     @Column
-    @Size(min = 2,max = 20)
+    @Size(min = 2, max = 20)
     private String name;
     @Positive
     private double price;
@@ -33,11 +34,9 @@ public class Accommodation extends BaseEntity {
     private double rating;
     @Basic
     private boolean available;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id",referencedColumnName = "id")
+    @Embedded
     private Address address;
-    @OneToMany(mappedBy = "accommodation",cascade = CascadeType.ALL,orphanRemoval = true)
-    @ToString.Exclude
+    @OneToMany
     private List<Reservation> reservations;
 
 }
