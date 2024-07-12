@@ -66,13 +66,14 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public List<Reservation> initializeReservation(List<ReservationDTO> reservations,Long accommodationId) {
-        if (reservations.isEmpty()) {
+        if (reservations == null) {
             return new ArrayList<>();
         }
         List<Reservation> reservationList = new ArrayList<>();
         for (ReservationDTO reservationDTO : reservations) {
             Reservation currentReservation = AccommodationMapper.mapReservationDTOToReservation(reservationDTO);
             currentReservation.setAccommodationId(accommodationId);
+            reservationList.add(currentReservation);
         }
         return reservationRepository.saveAll(reservationList);
     }

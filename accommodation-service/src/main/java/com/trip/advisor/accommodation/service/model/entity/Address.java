@@ -12,9 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
     @Size(min = 3,max = 20)
     @NotEmpty(message = "Street is required")
     private String street;

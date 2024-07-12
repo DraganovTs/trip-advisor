@@ -20,7 +20,6 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
     private Long accommodationId;
     private LocalDate startDate;
     private LocalDate endDate;
