@@ -28,4 +28,15 @@ public class Address {
     @Size(min = 2,max = 10)
     @NotEmpty(message = "Postal Code is required")
     private String postalCode;
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                '}';
+    }
 }

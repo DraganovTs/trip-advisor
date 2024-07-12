@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 public class ReservationDTO {
 
-    private Long accommodationId;
+
     private LocalDate startDate;
     private LocalDate endDate;
     @NotEmpty(message = "Guest name must be not empty")

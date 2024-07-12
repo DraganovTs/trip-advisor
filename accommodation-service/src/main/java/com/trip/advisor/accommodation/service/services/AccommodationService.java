@@ -20,10 +20,10 @@ public interface AccommodationService {
 
     /**
      *
-     * @param id of accommodation
+     * @param name of accommodation
      * @return AccommodationDTO
      */
-    AccommodationDTO getAccommodationById(long id);
+    AccommodationDTO getAccommodationByName(String name);
 
     /**
      *

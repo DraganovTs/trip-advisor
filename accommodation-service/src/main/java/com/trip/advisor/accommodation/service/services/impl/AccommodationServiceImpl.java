@@ -1,8 +1,9 @@
 package com.trip.advisor.accommodation.service.services.impl;
 
+import com.trip.advisor.accommodation.service.exception.AccommodationAlreadyExistException;
+import com.trip.advisor.accommodation.service.exception.ResourceNotFoundException;
 import com.trip.advisor.accommodation.service.mapper.AccommodationMapper;
 import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
-import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Accommodation;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.repository.AccommodationRepository;
@@ -11,6 +12,7 @@ import com.trip.advisor.accommodation.service.services.ReservationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
@@ -29,6 +31,15 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public void createAccommodation(AccommodationDTO accommodationDTO) {
         Accommodation accommodation = AccommodationMapper.mapAccommodationDTOToAccommodation(accommodationDTO);
+        Optional<Accommodation> optionalAccommodation = accommodationRepository.findByNameAndAddress_CityAndAddress_Street(
+                accommodation.getName(),
+                accommodation.getAddress().getCity(),
+                accommodation.getAddress().getStreet()
+        );
+        if (optionalAccommodation.isPresent()) {
+            throw new AccommodationAlreadyExistException("Accommodation already exist whit given name and address: "
+                    + String.join(", ", accommodation.getName(), accommodation.getAddress().toString()));
+        }
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
         List<Reservation> reservations =
                 reservationService.initializeReservation(accommodationDTO.getReservations()
@@ -48,12 +59,16 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     /**
-     * @param id of accommodation
+     * @param name of accommodation
      * @return AccommodationDTO
      */
     @Override
-    public AccommodationDTO getAccommodationById(long id) {
-        return null;
+    public AccommodationDTO getAccommodationByName(String name) {
+        Accommodation optionalAccommodation = accommodationRepository.findByName(name).orElseThrow(
+                () -> new ResourceNotFoundException("Accommodation"
+                        , "AccommodationId", name));
+
+        return AccommodationMapper.mapAccommodationToAccommodationDTO(optionalAccommodation);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.trip.advisor.accommodation.service.controller;
 
 import com.trip.advisor.accommodation.service.constants.AccommodationConstants;
 import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
+import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.dto.ResponseDTO;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,15 @@ public class AccommodationController {
                         AccommodationConstants.STATUS_201,
                         AccommodationConstants.MESSAGE_201));
 
+    }
+
+    @GetMapping("/fetch")
+    public ResponseEntity<AccommodationDTO> fetchAccommodation(@RequestParam String name) {
+
+        AccommodationDTO accommodationDTO = accommodationService.getAccommodationByName(name);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(accommodationDTO);
     }
 
 }

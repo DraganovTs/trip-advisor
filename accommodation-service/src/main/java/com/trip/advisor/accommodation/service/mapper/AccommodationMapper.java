@@ -10,6 +10,7 @@ import com.trip.advisor.accommodation.service.model.enums.AccommodationType;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class AccommodationMapper {
@@ -29,6 +30,18 @@ public class AccommodationMapper {
                 .build();
     }
 
+    public static AccommodationDTO mapAccommodationToAccommodationDTO(Accommodation optionalAccommodation) {
+        return AccommodationDTO.builder()
+                .name(optionalAccommodation.getName())
+                .price(optionalAccommodation.getPrice())
+                .type(optionalAccommodation.getType().toString())
+                .rating(optionalAccommodation.getRating())
+                .address(mapToAddressDTO(optionalAccommodation.getAddress()))
+                .reservations(mapReservationToReservationDTO(optionalAccommodation.getReservations()))
+                .build();
+    }
+
+
     public static Reservation mapReservationDTOToReservation(ReservationDTO reservationDTO) {
         return Reservation.builder()
                 .startDate(reservationDTO.getStartDate())
@@ -38,12 +51,26 @@ public class AccommodationMapper {
                 .build();
     }
 
-    private static AddressDTO mapToAddressDTO(AddressDTO addressDTO) {
+    public static List<ReservationDTO> mapReservationToReservationDTO(List<Reservation> reservations) {
+        List<ReservationDTO> reservationDTOs = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            ReservationDTO current = ReservationDTO.builder()
+                    .startDate(reservation.getStartDate())
+                    .endDate(reservation.getEndDate())
+                    .guestName(reservation.getGuestName())
+                    .guestEmail(reservation.getGuestEmail())
+                    .build();
+            reservationDTOs.add(current);
+        }
+        return reservationDTOs;
+    }
+
+    private static AddressDTO mapToAddressDTO(Address address) {
         return AddressDTO.builder()
-                .country(addressDTO.getCountry())
-                .state(addressDTO.getState())
-                .city(addressDTO.getCity())
-                .postalCode(addressDTO.getPostalCode())
+                .country(address.getCountry())
+                .state(address.getState())
+                .city(address.getCity())
+                .postalCode(address.getPostalCode())
                 .build();
     }
 
@@ -55,5 +82,6 @@ public class AccommodationMapper {
                 .postalCode(addressDTO.getPostalCode())
                 .build();
     }
+
 
 }
