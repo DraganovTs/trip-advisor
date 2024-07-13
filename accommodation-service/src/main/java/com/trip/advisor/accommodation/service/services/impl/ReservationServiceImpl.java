@@ -42,7 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public ReservationDTO getReservationById(long id) {
-        return null;
+        return ReservationDTO.builder().build();
     }
 
     /**
