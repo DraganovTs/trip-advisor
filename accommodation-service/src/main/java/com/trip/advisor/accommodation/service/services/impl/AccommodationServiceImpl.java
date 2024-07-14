@@ -83,6 +83,6 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public void deleteAccommodation(long id) {
-
+        accommodationRepository.deleteById(id);
     }
 }
