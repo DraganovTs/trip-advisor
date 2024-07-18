@@ -27,10 +27,9 @@ public interface AccommodationService {
 
     /**
      *
-     * @param id accommodation id
      * @param accommodationDTO updated accommodation
      * @return AccommodationDTO
      */
-    AccommodationDTO updateAccommodation(long id, AccommodationDTO accommodationDTO);
+    boolean updateAccommodation( AccommodationDTO accommodationDTO);
     void deleteAccommodation(long id);
 }

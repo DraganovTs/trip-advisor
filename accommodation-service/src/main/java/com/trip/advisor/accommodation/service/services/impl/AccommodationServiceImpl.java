@@ -72,13 +72,26 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     /**
-     * @param id               accommodation id
      * @param accommodationDTO updated accommodation
      * @return AccommodationDTO
      */
     @Override
-    public AccommodationDTO updateAccommodation(long id, AccommodationDTO accommodationDTO) {
-        return null;
+    public boolean updateAccommodation(AccommodationDTO accommodationDTO) {
+        boolean isUpdated = false;
+        Optional<Accommodation> optionalAccommodation = Optional.ofNullable(accommodationRepository.findByNameAndAddress_CityAndAddress_Street(
+                accommodationDTO.getName(),
+                accommodationDTO.getAddress().getCity(),
+                accommodationDTO.getAddress().getStreet()
+        ).orElseThrow(
+                () -> new ResourceNotFoundException("Accommodation",
+                        "accommodation name,accommodation city, accommodation street",
+                        String.join(", ", accommodationDTO.getName(),
+                                accommodationDTO.getAddress().toString())
+                )));
+        Accommodation updatedAccommodation = AccommodationMapper.mapAccommodationDTOToAccommodation(accommodationDTO);
+        updatedAccommodation.setAccommodationId(optionalAccommodation.get().getAccommodationId());
+        accommodationRepository.save(updatedAccommodation);
+        return true;
     }
 
     @Override

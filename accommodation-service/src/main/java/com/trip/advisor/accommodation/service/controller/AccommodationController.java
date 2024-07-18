@@ -2,7 +2,6 @@ package com.trip.advisor.accommodation.service.controller;
 
 import com.trip.advisor.accommodation.service.constants.AccommodationConstants;
 import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
-import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.dto.ResponseDTO;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
 import org.springframework.http.HttpStatus;
@@ -41,5 +40,7 @@ public class AccommodationController {
                 .status(HttpStatus.OK)
                 .body(accommodationDTO);
     }
+
+
 
 }
