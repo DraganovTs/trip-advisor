@@ -41,6 +41,19 @@ public class AccommodationController {
                 .body(accommodationDTO);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDTO> updateAccommodation(@RequestBody AccommodationDTO accommodationDTO) {
+        boolean isUpdated = accommodationService.updateAccommodation(accommodationDTO);
+        if (isUpdated) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDTO(AccommodationConstants.STATUS_200, AccommodationConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(AccommodationConstants.STATUS_500, AccommodationConstants.MESSAGE_500));
+        }
+    }
 
 
 }

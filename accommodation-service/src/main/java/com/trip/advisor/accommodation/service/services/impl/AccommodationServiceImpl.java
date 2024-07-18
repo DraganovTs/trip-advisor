@@ -77,7 +77,6 @@ public class AccommodationServiceImpl implements AccommodationService {
      */
     @Override
     public boolean updateAccommodation(AccommodationDTO accommodationDTO) {
-        boolean isUpdated = false;
         Optional<Accommodation> optionalAccommodation = Optional.ofNullable(accommodationRepository.findByNameAndAddress_CityAndAddress_Street(
                 accommodationDTO.getName(),
                 accommodationDTO.getAddress().getCity(),
@@ -90,7 +89,9 @@ public class AccommodationServiceImpl implements AccommodationService {
                 )));
         Accommodation updatedAccommodation = AccommodationMapper.mapAccommodationDTOToAccommodation(accommodationDTO);
         updatedAccommodation.setAccommodationId(optionalAccommodation.get().getAccommodationId());
+        updatedAccommodation.setReservations(optionalAccommodation.get().getReservations());
         accommodationRepository.save(updatedAccommodation);
+
         return true;
     }
 
