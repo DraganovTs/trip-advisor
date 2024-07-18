@@ -1,6 +1,8 @@
 package com.trip.advisor.accommodation.service.services;
 
 import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,5 +33,15 @@ public interface AccommodationService {
      * @return AccommodationDTO
      */
     boolean updateAccommodation( AccommodationDTO accommodationDTO);
-    void deleteAccommodation(long id);
+
+    /**
+     *
+     * @param name
+     * @param city
+     * @param street
+     * @return boolean is deleted or not
+     */
+    @Transactional
+    @Modifying
+    boolean deleteAccommodation(String name,String city, String street);
 }

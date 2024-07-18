@@ -40,4 +40,10 @@ public interface ReservationService {
      * @return List of reservationDTOs
      */
     List<Reservation> initializeReservation(List<ReservationDTO> reservations,Long accommodationId);
+
+    /**
+     *
+     * @param accommodationId
+     */
+    void deleteByAccommodationId(long accommodationId);
 }

@@ -65,7 +65,7 @@ public class ReservationServiceImpl implements ReservationService {
      * @return List of reservationDTOs
      */
     @Override
-    public List<Reservation> initializeReservation(List<ReservationDTO> reservations,Long accommodationId) {
+    public List<Reservation> initializeReservation(List<ReservationDTO> reservations, Long accommodationId) {
         if (reservations == null) {
             return new ArrayList<>();
         }
@@ -76,5 +76,13 @@ public class ReservationServiceImpl implements ReservationService {
             reservationList.add(currentReservation);
         }
         return reservationRepository.saveAll(reservationList);
+    }
+
+    /**
+     * @param accommodationId
+     */
+    @Override
+    public void deleteByAccommodationId(long accommodationId) {
+        reservationRepository.deleteReservationByAccommodationId(accommodationId);
     }
 }

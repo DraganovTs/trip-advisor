@@ -55,5 +55,21 @@ public class AccommodationController {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDTO> deleteAccommodation(@RequestParam String name,
+                                                           @RequestParam String city,
+                                                           @RequestParam String street) {
+        boolean isDeleted = accommodationService.deleteAccommodation(name, city, street);
+        if (isDeleted) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDTO(AccommodationConstants.STATUS_200, AccommodationConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(AccommodationConstants.STATUS_500, AccommodationConstants.MESSAGE_500));
+        }
+    }
+
 
 }

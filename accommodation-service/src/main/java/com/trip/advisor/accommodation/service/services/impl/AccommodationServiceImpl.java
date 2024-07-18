@@ -95,8 +95,27 @@ public class AccommodationServiceImpl implements AccommodationService {
         return true;
     }
 
+    /**
+     * @param name
+     * @param city
+     * @param street
+     * @return boolean is deleted or not
+     */
     @Override
-    public void deleteAccommodation(long id) {
-        accommodationRepository.deleteById(id);
+    public boolean deleteAccommodation(String name, String city, String street) {
+        Optional<Accommodation> optionalAccommodation = Optional.ofNullable(accommodationRepository.findByNameAndAddress_CityAndAddress_Street(
+                        name, city, street)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Accommodation",
+                                "accommodation name,accommodation city, accommodation street",
+                                String.join(", ", name,
+                                        city, street)
+                        )));
+        reservationService.deleteByAccommodationId(optionalAccommodation.get().getAccommodationId());
+        accommodationRepository.deleteById(optionalAccommodation.get().getAccommodationId());
+
+        return true;
     }
+
+
 }
