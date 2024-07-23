@@ -1,4 +1,4 @@
-package com.trip.advisor.accommodation.service.model.dto;
+package com.trip.advisor.common.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

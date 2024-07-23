@@ -2,7 +2,8 @@ package com.trip.advisor.accommodation.service.controller;
 
 import com.trip.advisor.accommodation.service.constants.AccommodationConstants;
 import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
-import com.trip.advisor.accommodation.service.model.dto.ResponseDTO;
+import com.trip.advisor.common.constants.Constants;
+import com.trip.advisor.common.model.dto.ResponseDTO;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
@@ -53,11 +54,11 @@ public class AccommodationController {
         if (isUpdated) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(new ResponseDTO(AccommodationConstants.STATUS_200, AccommodationConstants.MESSAGE_200));
+                    .body(new ResponseDTO(Constants.STATUS_200, Constants.MESSAGE_200));
         } else {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(AccommodationConstants.STATUS_500, AccommodationConstants.MESSAGE_500));
+                    .body(new ResponseDTO(Constants.STATUS_500, Constants.MESSAGE_500));
         }
     }
 
@@ -75,11 +76,11 @@ public class AccommodationController {
         if (isDeleted) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(new ResponseDTO(AccommodationConstants.STATUS_200, AccommodationConstants.MESSAGE_200));
+                    .body(new ResponseDTO(Constants.STATUS_200, Constants.MESSAGE_200));
         } else {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(AccommodationConstants.STATUS_500, AccommodationConstants.MESSAGE_500));
+                    .body(new ResponseDTO(Constants.STATUS_500, Constants.MESSAGE_500));
         }
     }
 

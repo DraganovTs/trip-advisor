@@ -9,10 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>accommodation-service</artifactId>
-
-    <properties>
-    </properties>
+    <artifactId>events-service</artifactId>
 
     <dependencies>
         <dependency>

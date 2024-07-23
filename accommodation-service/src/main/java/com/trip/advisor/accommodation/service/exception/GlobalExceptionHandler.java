@@ -1,6 +1,6 @@
 package com.trip.advisor.accommodation.service.exception;
 
-import com.trip.advisor.accommodation.service.model.dto.ErrorResponseDTO;
+import com.trip.advisor.common.model.dto.ErrorResponseDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
