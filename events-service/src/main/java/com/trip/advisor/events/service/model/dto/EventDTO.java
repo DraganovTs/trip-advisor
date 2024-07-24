@@ -1,6 +1,7 @@
 package com.trip.advisor.events.service.model.dto;
 
 
+import com.trip.advisor.events.service.constants.EventMessage;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
@@ -19,16 +20,16 @@ import java.time.LocalDate;
 public class EventDTO {
 
 
-    @Size(min = 1, max = 30)
-    @NotEmpty(message = "Name is required!")
+    @Size(min = 1, max = 30,message = EventMessage.EVENT_NAME_SIZE)
+    @NotEmpty(message = EventMessage.EVENT_NAME_REQUIRED)
     private String name;
-    @Size(min = 2,max = 20)
-    @NotEmpty(message = "City is required!")
+    @Size(min = 2,max = 20, message = EventMessage.CITY_NAME_SIZE)
+    @NotEmpty(message = EventMessage.CITY_NAME_REQUIRED)
     private String city;
-    @NotEmpty(message = "Type is required")
+    @NotEmpty(message = EventMessage.EVENT_TYPE_REQUIRED)
     private String eventType;
-    @Future(message = "Event must be not in past")
+    @Future(message = EventMessage.EVENT_DATE_FUTURE)
     private LocalDate date;
-    @Positive(message = "price must be positive")
+    @Positive(message = EventMessage.EVENT_PRICE_POSITIVE)
     private double ticketPrice;
 }

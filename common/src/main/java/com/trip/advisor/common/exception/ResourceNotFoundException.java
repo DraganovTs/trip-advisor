@@ -1,4 +1,4 @@
-package com.trip.advisor.accommodation.service.exception;
+package com.trip.advisor.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -2,7 +2,7 @@ package com.trip.advisor.events.service.services;
 
 import com.trip.advisor.events.service.model.dto.EventDTO;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface EventService {
@@ -31,7 +31,7 @@ public interface EventService {
      * @param dateTime
      * @return
      */
-    List<EventDTO> getEventsByDate(LocalDateTime dateTime);
+    List<EventDTO> getEventsByDate(LocalDate dateTime);
 
     /**
      * get all events by city name
@@ -47,6 +47,6 @@ public interface EventService {
      * @param endDate
      * @return
      */
-    List<EventDTO> getAllEventByCityAndTimePeriod(String city, LocalDateTime startDate, LocalDateTime endDate);
+    List<EventDTO> getAllEventByCityAndTimePeriod(String city, LocalDate startDate, LocalDate endDate);
 
 }

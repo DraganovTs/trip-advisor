@@ -1,5 +1,6 @@
 package com.trip.advisor.events.service.services.impl;
 
+import com.trip.advisor.common.exception.ResourceNotFoundException;
 import com.trip.advisor.events.service.exception.EventAlreadyExistException;
 import com.trip.advisor.events.service.mapper.EventMapper;
 import com.trip.advisor.events.service.model.dto.EventDTO;
@@ -8,7 +9,7 @@ import com.trip.advisor.events.service.repository.EventRepository;
 import com.trip.advisor.events.service.services.EventService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
 
-    public EventServiceImpl(EventMapper eventMapper, EventRepository eventRepository) {
+    public EventServiceImpl(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
 
@@ -45,7 +46,12 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public boolean deleteEvent(String name) {
-        return false;
+        Event event = eventRepository.findByName(name).orElseThrow(
+                () -> new ResourceNotFoundException("Event", "event name", name));
+
+        eventRepository.delete(event);
+
+        return true;
     }
 
     /**
@@ -56,18 +62,28 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public boolean updateEvent(EventDTO eventDTO) {
-        return false;
+        Event event = eventRepository.findByName(eventDTO.getName()).orElseThrow(
+                () -> new ResourceNotFoundException("Event", "event name", eventDTO.getName()));
+
+        Event updatedEvent = EventMapper.mapEventDTOToEvent(eventDTO);
+        updatedEvent.setId(event.getId());
+        eventRepository.save(updatedEvent);
+
+        return true;
     }
 
     /**
      * get events by date
      *
-     * @param dateTime
+     * @param date
      * @return
      */
     @Override
-    public List<EventDTO> getEventsByDate(LocalDateTime dateTime) {
-        return List.of();
+    public List<EventDTO> getEventsByDate(LocalDate date) {
+        List<Event> eventsOnDate = eventRepository.findAllByDate(date).orElseThrow(
+                () -> new ResourceNotFoundException("Event", "event date", date.toString())
+        );
+        return EventMapper.mapEventToEventDTO(eventsOnDate);
     }
 
     /**
@@ -78,7 +94,9 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public List<EventDTO> getAllEventsInCity(String city) {
-        return List.of();
+        List<Event> eventsInCity = eventRepository.findAllByCity(city).orElseThrow(
+                () -> new ResourceNotFoundException("Event", "City", city));
+        return EventMapper.mapEventToEventDTO(eventsInCity);
     }
 
     /**
@@ -90,7 +108,12 @@ public class EventServiceImpl implements EventService {
      * @return
      */
     @Override
-    public List<EventDTO> getAllEventByCityAndTimePeriod(String city, LocalDateTime startDate, LocalDateTime endDate) {
-        return List.of();
+    public List<EventDTO> getAllEventByCityAndTimePeriod(String city, LocalDate startDate, LocalDate endDate) {
+        List<Event> eventsByCityAndDateBetween = eventRepository.findAllByCityAndDateBetween(city, startDate, endDate)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Event", "City , Start date , End date",
+                                String.join(", ", city, startDate.toString(), endDate.toString())));
+
+        return EventMapper.mapEventToEventDTO(eventsByCityAndDateBetween);
     }
 }
