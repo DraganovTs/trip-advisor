@@ -19,6 +19,7 @@
         <module>accommodation-service</module>
         <module>events-service</module>
         <module>common</module>
+        <module>recommendation-service</module>
     </modules>
 
     <properties>
