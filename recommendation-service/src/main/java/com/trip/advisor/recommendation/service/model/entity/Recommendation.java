@@ -37,9 +37,4 @@ public class Recommendation extends BaseEntity {
     private String email;
     private String openingHours;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
 }
