@@ -1,4 +1,4 @@
-package com.trip.advisor.accommodation.service;
+package com.trip.advisor.events.service;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -13,8 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing(auditorAwareRef = "auditAwareImpl")
 @OpenAPIDefinition(
         info = @Info(
-                title = "Accommodation microservice REST API Documentation",
-                description = "Trip adviser Accommodation microservice REST API Documentation",
+                title = "Events microservice REST API Documentation",
+                description = "Trip adviser Events microservice REST API Documentation",
                 version = "v1",
                 contact = @Contact(
                         name = "DraganovTS",
@@ -27,12 +27,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
                 )
         ),
         externalDocs = @ExternalDocumentation(
-                description = "Accommodation microservice REST API Documentation",
+                description = "Events microservice REST API Documentation",
                 url = "https://tze.com"
         )
 )
-public class AccommodationApplication {
+public class EventsApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AccommodationApplication.class, args);
+        SpringApplication.run(EventsApplication.class, args);
+
     }
 }

@@ -5,6 +5,10 @@ import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
 import com.trip.advisor.common.constants.Constants;
 import com.trip.advisor.common.model.dto.ResponseDTO;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
@@ -13,6 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+        name = "CRUD REST API for Accommodations in TripAdvisor",
+        description = "CRUD REST APIs in TripAdvisor to CREATE, UPDATE, FETCH, and DELETE accommodation details"
+)
 @RestController
 @RequestMapping(path = "/api/accommodation", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
@@ -23,7 +31,14 @@ public class AccommodationController {
     public AccommodationController(AccommodationService accommodationService) {
         this.accommodationService = accommodationService;
     }
-
+    @Operation(
+            summary = "Create accommodation REST API",
+            description = "REST API to create an accommodation in TripAdvisor"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "HTTP Status CREATED"
+    )
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createAccommodation(@Valid @RequestBody AccommodationDTO accommodationDTO) {
 
@@ -36,7 +51,14 @@ public class AccommodationController {
                         AccommodationConstants.MESSAGE_201));
 
     }
-
+    @Operation(
+            summary = "Fetch accommodation REST API",
+            description = "REST API to fetch accommodation details by name in TripAdvisor"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status OK"
+    )
     @GetMapping("/fetch")
     public ResponseEntity<AccommodationDTO> fetchAccommodation(@RequestParam
                                                                @Size(min = 2, max = 20,message = "name must be between 2 and 20")
@@ -47,7 +69,14 @@ public class AccommodationController {
                 .status(HttpStatus.OK)
                 .body(accommodationDTO);
     }
-
+    @Operation(
+            summary = "Update accommodation REST API",
+            description = "REST API to update an accommodation in TripAdvisor"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
+            @ApiResponse(responseCode = "500", description = "HTTP Status INTERNAL_SERVER_ERROR")
+    })
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateAccommodation(@Valid @RequestBody AccommodationDTO accommodationDTO) {
         boolean isUpdated = accommodationService.updateAccommodation(accommodationDTO);
@@ -61,7 +90,14 @@ public class AccommodationController {
                     .body(new ResponseDTO(Constants.STATUS_500, Constants.MESSAGE_500));
         }
     }
-
+    @Operation(
+            summary = "Delete accommodation REST API",
+            description = "REST API to delete an accommodation in TripAdvisor by name, city, and street"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
+            @ApiResponse(responseCode = "500", description = "HTTP Status INTERNAL_SERVER_ERROR")
+    })
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDTO> deleteAccommodation(@RequestParam
                                                            @Size(min = 2, max = 20 , message = "name must be between 2 and 20")

@@ -1,6 +1,7 @@
 package com.trip.advisor.accommodation.service.model.dto;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,19 +14,51 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(
+        name = "Accommodation",
+        description = "Schema to hold Accommodation information"
+)
 public class AccommodationDTO {
-
-    @Size(min = 2,max = 20)
+    @Schema(
+            description = "Name of the accommodation",
+            example = "Holiday Inn",
+            required = true
+    )
+    @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters")
     private String name;
-    @Positive
+
+    @Schema(
+            description = "Price of the accommodation per night",
+            example = "150.0",
+            required = true
+    )
+    @Positive(message = "Price must be a positive value")
     private double price;
+
+    @Schema(
+            description = "Type of accommodation (e.g., hotel, motel, hostel)",
+            example = "Hotel"
+    )
+    @NotEmpty(message = "Type cannot be empty")
     private String type;
-    @DecimalMin(value = "0")
-    @DecimalMax(value = "10")
+
+    @Schema(
+            description = "Rating of the accommodation between 0 and 10",
+            example = "8.5"
+    )
+    @DecimalMin(value = "0.0", message = "Rating must be at least 0.0")
+    @DecimalMax(value = "10.0", message = "Rating must be at most 10.0")
     private double rating;
-    @NotNull
+
+    @Schema(
+            description = "Address details of the accommodation"
+    )
+    @NotNull(message = "Address cannot be null")
     private AddressDTO address;
 
+    @Schema(
+            description = "List of reservations for the accommodation"
+    )
     private List<ReservationDTO> reservations;
 
 }
