@@ -3,9 +3,12 @@ package com.trip.advisor.accommodation.service.controller;
 import com.trip.advisor.accommodation.service.constants.AccommodationConstants;
 import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
 import com.trip.advisor.common.constants.Constants;
+import com.trip.advisor.common.model.dto.ErrorResponseDTO;
 import com.trip.advisor.common.model.dto.ResponseDTO;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -75,7 +78,8 @@ public class AccommodationController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
-            @ApiResponse(responseCode = "500", description = "HTTP Status INTERNAL_SERVER_ERROR")
+            @ApiResponse(responseCode = "500", description = "HTTP Status INTERNAL_SERVER_ERROR",
+            content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateAccommodation(@Valid @RequestBody AccommodationDTO accommodationDTO) {
@@ -96,7 +100,8 @@ public class AccommodationController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
-            @ApiResponse(responseCode = "500", description = "HTTP Status INTERNAL_SERVER_ERROR")
+            @ApiResponse(responseCode = "500", description = "HTTP Status INTERNAL_SERVER_ERROR",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDTO> deleteAccommodation(@RequestParam

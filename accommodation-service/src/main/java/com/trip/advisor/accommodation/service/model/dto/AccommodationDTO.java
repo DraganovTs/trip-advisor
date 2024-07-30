@@ -21,16 +21,14 @@ import java.util.List;
 public class AccommodationDTO {
     @Schema(
             description = "Name of the accommodation",
-            example = "Holiday Inn",
-            required = true
+            example = "Holiday Inn"
     )
     @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters")
     private String name;
 
     @Schema(
             description = "Price of the accommodation per night",
-            example = "150.0",
-            required = true
+            example = "150.0"
     )
     @Positive(message = "Price must be a positive value")
     private double price;
