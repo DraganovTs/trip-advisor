@@ -20,6 +20,7 @@
         <module>events-service</module>
         <module>common</module>
         <module>recommendation-service</module>
+        <module>configserver</module>
     </modules>
 
     <properties>
@@ -32,6 +33,7 @@
         <mockito-core.version>5.11.0</mockito-core.version>
         <assertj-core.version>3.25.3</assertj-core.version>
         <byte-buddy.version>1.14.17</byte-buddy.version>
+        <spring.cloud.config.version>4.1.0</spring.cloud.config.version>
     </properties>
 
     <dependencyManagement>
@@ -102,6 +104,16 @@
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
                 <version>${byte-buddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-config-server</artifactId>
+                <version>${spring.cloud.config.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-config-client</artifactId>
+                <version>${spring.cloud.config.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
