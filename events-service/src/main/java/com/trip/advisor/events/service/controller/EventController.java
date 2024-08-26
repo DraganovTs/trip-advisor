@@ -6,6 +6,7 @@ import com.trip.advisor.common.model.dto.ResponseDTO;
 import com.trip.advisor.events.service.constants.EventConstants;
 import com.trip.advisor.events.service.constants.EventMessage;
 import com.trip.advisor.events.service.model.dto.EventDTO;
+import com.trip.advisor.events.service.model.dto.EventsContactInfoDTO;
 import com.trip.advisor.events.service.services.impl.EventServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,11 +18,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,9 +39,16 @@ import java.util.List;
 public class EventController {
 
     private final EventServiceImpl eventService;
+    @Value("${build.version}")
+    private String buildVersion;
+    private final Environment environment;
+    private final EventsContactInfoDTO eventsContactInfoDTO;
 
-    public EventController(EventServiceImpl eventService) {
+    public EventController(EventServiceImpl eventService, Environment environment,
+                           EventsContactInfoDTO eventsContactInfoDTO) {
         this.eventService = eventService;
+        this.environment = environment;
+        this.eventsContactInfoDTO = eventsContactInfoDTO;
     }
 
     @Operation(
@@ -45,7 +56,7 @@ public class EventController {
             description = "REST API to create event in TripAdvisor"
     )
     @ApiResponse(
-           responseCode = "201",
+            responseCode = "201",
             description = "HTTP Status CREATED"
     )
     @PostMapping("/create")
@@ -84,6 +95,7 @@ public class EventController {
                     .body(new ResponseDTO(Constants.STATUS_500, Constants.MESSAGE_500));
         }
     }
+
     @Operation(
             summary = "Delete event REST API",
             description = "REST API to delete an event in TripAdvisor by name"
@@ -109,6 +121,7 @@ public class EventController {
                     .body(new ResponseDTO(Constants.STATUS_500, Constants.MESSAGE_500));
         }
     }
+
     @Operation(
             summary = "Get events by date REST API",
             description = "REST API to fetch events in TripAdvisor by date"
@@ -141,6 +154,7 @@ public class EventController {
                 .status(HttpStatus.OK)
                 .body(events);
     }
+
     @Operation(
             summary = "Get events by city and time period REST API",
             description = "REST API to fetch events in TripAdvisor by city and time period"
@@ -159,4 +173,38 @@ public class EventController {
                 .status(HttpStatus.OK)
                 .body(events);
     }
+
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(
+            summary = "Get Contact Info",
+            description = "Contact Info details that can be reached out in case of any issues"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
+            )
+
+    })
+    @GetMapping("/contact-info")
+    public ResponseEntity<EventsContactInfoDTO> getContactInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(eventsContactInfoDTO);
+    }
+
+
 }

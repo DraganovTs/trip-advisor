@@ -1,0 +1,11 @@
+build:
+  version: "1.0"
+
+accommodation:
+  message: "Welcome to tripadvisor accommodations related QA APIs"
+  contactDetails:
+    name: "Petar Petrov"
+    email: "petar@gmail.com"
+  onCallSupport:
+    -(888)888-888
+    -(777)777-777

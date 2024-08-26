@@ -1,0 +1,11 @@
+build:
+  version: "2.0"
+
+accommodation:
+  message: "Welcome to tripadvisor events related Production APIs"
+  contactDetails:
+    name: "Ivan Ivanov"
+    email: "ivan@gmail.com"
+  onCallSupport:
+    -(888)888-888
+    -(777)777-777

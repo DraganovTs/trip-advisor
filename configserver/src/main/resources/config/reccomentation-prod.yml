@@ -1,0 +1,11 @@
+build:
+  version: "3.0"
+
+accommodation:
+  message: "Welcome to tripadvisor recommendation related Production APIs"
+  contactDetails:
+    name: "Ivan Ivanov"
+    email: "ivan@gmail.com"
+  onCallSupport:
+    -(888)888-888
+    -(777)777-777

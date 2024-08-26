@@ -1,7 +1,10 @@
 server:
   port: 8080
-
 spring:
+  application:
+    name: "accommodation"
+  profiles:
+    active: "prod"
   datasource:
     url: jdbc:h2:mem:accommodationdb
     driver-class-name: org.h2.Driver
@@ -15,3 +18,5 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  config:
+    import: "optional:configserver:http://localhost:8071/"

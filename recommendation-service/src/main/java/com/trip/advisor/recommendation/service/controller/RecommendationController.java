@@ -4,6 +4,7 @@ import com.trip.advisor.common.constants.Constants;
 import com.trip.advisor.common.model.dto.ErrorResponseDTO;
 import com.trip.advisor.common.model.dto.ResponseDTO;
 import com.trip.advisor.recommendation.service.constants.RecommendationConstants;
+import com.trip.advisor.recommendation.service.model.dto.RecommendationContactInfoDTO;
 import com.trip.advisor.recommendation.service.model.dto.RecommendationDTO;
 import com.trip.advisor.recommendation.service.service.impl.RecommendationServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +32,16 @@ import java.util.List;
 public class RecommendationController {
 
     private final RecommendationServiceImpl recommendationService;
+    @Value("${build.version}")
+    private String buildVersion;
+    private final Environment environment;
+    private final RecommendationContactInfoDTO eventsContactInfoDTO;
 
-    public RecommendationController(RecommendationServiceImpl recommendationService) {
+
+    public RecommendationController(RecommendationServiceImpl recommendationService, Environment environment, RecommendationContactInfoDTO eventsContactInfoDTO) {
         this.recommendationService = recommendationService;
+        this.environment = environment;
+        this.eventsContactInfoDTO = eventsContactInfoDTO;
     }
     @Operation(
             summary = "Create recommendation REST API",
@@ -134,6 +144,39 @@ public class RecommendationController {
                     .body(new ResponseDTO(Constants.STATUS_500,Constants.MESSAGE_500));
         }
     }
+
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(
+            summary = "Get Contact Info",
+            description = "Contact Info details that can be reached out in case of any issues"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDTO.class)
+                    )
+            )
+
+    })
+    @GetMapping("/contact-info")
+    public ResponseEntity<RecommendationContactInfoDTO> getContactInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(eventsContactInfoDTO);
+    }
+
 
 
 }
