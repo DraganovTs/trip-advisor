@@ -25,4 +25,12 @@ management:
       exposure:
         include: "*"
 
+logging:
+  level:
+    org.springframework.boot.actuate: DEBUG
 
+info:
+  app:
+    name: "accounts"
+    description: "Bankcorp Accounts Application"
+    version: "1.0.0"
