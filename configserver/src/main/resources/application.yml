@@ -6,9 +6,15 @@ spring:
   cloud:
     config:
       server:
-        native:
-          search-locations: "classpath:/config"
-
+        git:
+          uri: "https://github.com/DraganovTs/tripadvisor-config.git"
+          default-label: master
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+#        native:
+#          search-locations: "file:///C:/Users/zabra/Documents/config"
+#          search-locations: "classpath:/config"
 
 server:
   port: 8071
