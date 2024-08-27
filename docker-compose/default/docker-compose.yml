@@ -1,6 +1,17 @@
 services:
+  configserver:
+    image: "tzetzaka2/configserver:s2"
+    container_name: accommodation-ms
+    ports:
+      - "8071:8071"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - tripadvisor
   accommodation-service:
-    image: "tzetzaka2/accommodation-service:s1"
+    image: "tzetzaka2/accommodation-service:s2"
     container_name: accommodation-ms
     ports:
       - "8080:8080"
@@ -10,9 +21,13 @@ services:
           memory: 700m
     networks:
       - tripadvisor
+    environment:
+      SPRING_APPLICATION_NAME: "accommodation-service"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
 
   recommendation-service:
-    image: "tzetzaka2/recommendation-service:s1"
+    image: "tzetzaka2/recommendation-service:s2"
     container_name: recommendation-ms
     ports:
       - "8090:8090"
@@ -22,9 +37,13 @@ services:
           memory: 700m
     networks:
       - tripadvisor
+    environment:
+      SPRING_APPLICATION_NAME: "recommendation-service"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
 
   events-service:
-    image: "tzetzaka2/events-service:s1"
+    image: "tzetzaka2/events-service:s2"
     container_name: events-ms
     ports:
       - "9000:9000"
@@ -34,6 +53,10 @@ services:
           memory: 700m
     networks:
       - tripadvisor
+    environment:
+      SPRING_APPLICATION_NAME: "events-service"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: default
 
 networks:
   tripadvisor:
