@@ -16,7 +16,7 @@ services:
       service: network-deploy-service
 
   configserver:
-    image: "custom-configserver"
+    image: "tzetzaka2/configserver:s2"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -34,9 +34,6 @@ services:
       service: microservice-base-config
     environment:
       OTEL_SERVICE_NAME: "configserver"
-      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: "https://github.com/DraganovTs/tripadvisor-config.git"
-      SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL: master
-      SPRING_CLOUD_CONFIG_SERVER_GIT_TIMEOUT: 5
 
   accommodation-service:
     image: "tzetzaka2/accommodation-service:s2"

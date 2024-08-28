@@ -174,6 +174,13 @@ public class EventController {
                 .body(events);
     }
 
+    @GetMapping("/build-info")
+    public ResponseEntity<String>getBuildVersion() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(buildVersion);
+    }
+
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity
