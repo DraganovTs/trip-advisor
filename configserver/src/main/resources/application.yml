@@ -15,11 +15,14 @@ spring:
 #        native:
 #          search-locations: "file:///C:/Users/zabra/Documents/config"
 #          search-locations: "classpath:/config"
-  rabbitmq:
-    host: "localhost"
-    port: 5672
-    username: "guest"
-    password: "guest"
+
+#only if need automated reload on config files from git
+
+#  rabbitmq:
+#    host: "localhost"
+#    port: 5672
+#    username: "guest"
+#    password: "guest"
 
 server:
   port: 8071

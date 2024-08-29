@@ -6,25 +6,34 @@ spring:
   profiles:
     active: "prod"
   datasource:
-    url: jdbc:h2:mem:eventdb
-    driver-class-name: org.h2.Driver
-    username: tze
-    password: ''
-  h2:
-    console:
-      enabled: true
+    url: jdbc:mysql://localhost:3307/eventsdb
+    username: root
+    password: root
+#    url: jdbc:h2:mem:eventdb
+#    driver-class-name: org.h2.Driver
+#    username: tze
+#    password: ''
+#  h2:
+#    console:
+#      enabled: true
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    hibernate:
+#      ddl-auto: update
     show-sql: true
+  sql:
+    init:
+      mode: always
   config:
     import: "optional:configserver:http://localhost:8071/"
-  rabbitmq:
-    host: "localhost"
-    port: 5672
-    username: "guest"
-    password: "guest"
+
+    #only if need automated reload on config files from git
+
+#  rabbitmq:
+#    host: "localhost"
+#    port: 5672
+#    username: "guest"
+#    password: "guest"
 
 management:
   endpoints:
