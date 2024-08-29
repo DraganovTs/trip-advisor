@@ -16,7 +16,7 @@ services:
       service: network-deploy-service
 
   configserver:
-    image: "custom-configserver"
+    image: "tzetzaka2/configserver:s2"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -32,11 +32,7 @@ services:
     extends:
       file: common-config.yml
       service: microservice-base-config
-    environment:
-      OTEL_SERVICE_NAME: "configserver"
-      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: "https://github.com/DraganovTs/tripadvisor-config.git"
-      SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL: master
-      SPRING_CLOUD_CONFIG_SERVER_GIT_TIMEOUT: 5
+
 
   accommodation-service:
     image: "tzetzaka2/accommodation-service:s2"
@@ -44,11 +40,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_APPLICATION_NAME: "accommodation-service"
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_APPLICATION_NAME: "accommodation"
     extends:
       file: common-config.yml
       service: microservice-configserver-config
+
 
   recommendation-service:
     image: "tzetzaka2/recommendation-service:s2"
@@ -59,7 +55,7 @@ services:
       file: common-config.yml
       service: microservice-configserver-config
     environment:
-      SPRING_APPLICATION_NAME: "recommendation-service"
+      SPRING_APPLICATION_NAME: "recommendation"
 
 
   events-service:
@@ -71,7 +67,7 @@ services:
       file: common-config.yml
       service: microservice-configserver-config
     environment:
-      SPRING_APPLICATION_NAME: "events-service"
+      SPRING_APPLICATION_NAME: "events"
 
 
 networks:
