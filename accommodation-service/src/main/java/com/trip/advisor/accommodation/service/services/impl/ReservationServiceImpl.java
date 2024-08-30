@@ -5,6 +5,7 @@ import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.repository.ReservationRepository;
 import com.trip.advisor.accommodation.service.services.ReservationService;
+import com.trip.advisor.common.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     /**
-     * @param reservationDTO create accommodation entity
+     * @param reservationDTO create reservation entity
      */
     @Override
     public Reservation createReservation(ReservationDTO reservationDTO) {
@@ -33,7 +34,8 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public List<ReservationDTO> getAllReservations() {
-        return List.of();
+        List<Reservation> reservations = reservationRepository.findAll();
+        return AccommodationMapper.mapReservationsToReservationDTOs(reservations);
     }
 
     /**
@@ -42,7 +44,9 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public ReservationDTO getReservationById(long id) {
-        return ReservationDTO.builder().build();
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", String.valueOf(id)));
+        return AccommodationMapper.mapReservationToReservationDTO(reservation);
     }
 
     /**
@@ -52,34 +56,49 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public ReservationDTO updateReservation(long id, ReservationDTO reservationDTO) {
-        return null;
+        Reservation existingReservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", String.valueOf(id)));
+
+        Reservation updatedReservation = AccommodationMapper.mapReservationDTOToReservation(reservationDTO);
+        updatedReservation.setId(id);
+
+        reservationRepository.save(updatedReservation);
+
+        return AccommodationMapper.mapReservationToReservationDTO(updatedReservation);
     }
+
 
     @Override
     public void deleteReservation(long id) {
+        if (!reservationRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Reservation", "id", String.valueOf(id));
+        }
         reservationRepository.deleteById(id);
     }
 
     /**
      * @param reservations list of initial reservations
-     * @return List of reservationDTOs
+     * @param accommodationId ID of the associated accommodation
+     * @return List of reservation entities
      */
     @Override
     public List<Reservation> initializeReservation(List<ReservationDTO> reservations, Long accommodationId) {
         if (reservations == null) {
             return new ArrayList<>();
         }
+
         List<Reservation> reservationList = new ArrayList<>();
         for (ReservationDTO reservationDTO : reservations) {
             Reservation currentReservation = AccommodationMapper.mapReservationDTOToReservation(reservationDTO);
-            currentReservation.setAccommodationId(accommodationId);
+            currentReservation.setAccommodationId(accommodationId); // Set the accommodation ID
             reservationList.add(currentReservation);
         }
+
         return reservationRepository.saveAll(reservationList);
     }
 
     /**
-     * @param accommodationId
+     * @param accommodationId ID of the associated accommodation
      */
     @Override
     public void deleteByAccommodationId(long accommodationId) {

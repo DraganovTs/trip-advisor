@@ -29,18 +29,27 @@ public class AccommodationMapper {
                 .reservations(new ArrayList<>())
                 .build();
     }
-
-    public static AccommodationDTO mapAccommodationToAccommodationDTO(Accommodation optionalAccommodation) {
+    public static AccommodationDTO mapAccommodationToAccommodationDTO(Accommodation accommodation) {
         return AccommodationDTO.builder()
-                .name(optionalAccommodation.getName())
-                .price(optionalAccommodation.getPrice())
-                .type(optionalAccommodation.getType().toString())
-                .rating(optionalAccommodation.getRating())
-                .address(mapToAddressDTO(optionalAccommodation.getAddress()))
-                .reservations(mapReservationToReservationDTO(optionalAccommodation.getReservations()))
+                .name(accommodation.getName())
+                .price(accommodation.getPrice())
+                .type(accommodation.getType().toString())
+                .rating(accommodation.getRating())
+                .address(mapToAddressDTO(accommodation.getAddress()))
+                .reservations(mapReservationsToReservationDTOs(accommodation.getReservations())) // Use the list mapping method
                 .build();
     }
 
+
+
+    public static ReservationDTO mapReservationToReservationDTO(Reservation reservation) {
+        return ReservationDTO.builder()
+                .startDate(reservation.getStartDate())
+                .endDate(reservation.getEndDate())
+                .guestName(reservation.getGuestName())
+                .guestEmail(reservation.getGuestEmail())
+                .build();
+    }
 
     public static Reservation mapReservationDTOToReservation(ReservationDTO reservationDTO) {
         return Reservation.builder()
@@ -50,17 +59,10 @@ public class AccommodationMapper {
                 .guestEmail(reservationDTO.getGuestEmail())
                 .build();
     }
-
-    public static List<ReservationDTO> mapReservationToReservationDTO(List<Reservation> reservations) {
+    public static List<ReservationDTO> mapReservationsToReservationDTOs(List<Reservation> reservations) {
         List<ReservationDTO> reservationDTOs = new ArrayList<>();
         for (Reservation reservation : reservations) {
-            ReservationDTO current = ReservationDTO.builder()
-                    .startDate(reservation.getStartDate())
-                    .endDate(reservation.getEndDate())
-                    .guestName(reservation.getGuestName())
-                    .guestEmail(reservation.getGuestEmail())
-                    .build();
-            reservationDTOs.add(current);
+            reservationDTOs.add(mapReservationToReservationDTO(reservation));
         }
         return reservationDTOs;
     }
@@ -76,6 +78,7 @@ public class AccommodationMapper {
 
     private static Address mapToAddress(AddressDTO addressDTO) {
         return Address.builder()
+                .street(addressDTO.getStreet())
                 .country(addressDTO.getCountry())
                 .state(addressDTO.getState())
                 .city(addressDTO.getCity())

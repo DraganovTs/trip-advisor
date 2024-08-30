@@ -20,13 +20,22 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long accommodationId;
+
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
+
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
-    @NotEmpty(message = "guest name must be not empty")
-    @Size(min = 3, max = 20)
+
+    @Column(name = "guest_name", nullable = false, length = 20)
     private String guestName;
-    @NotEmpty(message = "email must be not empty")
-    @Email(message = "email must be valid")
+
+    @Column(name = "guest_email", nullable = false)
     private String guestEmail;
+
+    @Column(name = "accommodation_id", nullable = false)
+    private Long accommodationId; // Store the accommodation ID
+
+
+
 }

@@ -21,6 +21,8 @@ spring:
 #    hibernate:
 #      ddl-auto: update
     show-sql: true
+    hibernate:
+      ddl-auto: create-drop
   sql:
     init:
       mode: always

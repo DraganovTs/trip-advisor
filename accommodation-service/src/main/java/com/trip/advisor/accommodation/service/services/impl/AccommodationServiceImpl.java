@@ -37,17 +37,19 @@ public class AccommodationServiceImpl implements AccommodationService {
                 accommodation.getAddress().getStreet()
         );
         if (optionalAccommodation.isPresent()) {
-            throw new AccommodationAlreadyExistException("Accommodation already exist whit given name and address: "
+            throw new AccommodationAlreadyExistException("Accommodation already exists with given name and address: "
                     + String.join(", ", accommodation.getName(), accommodation.getAddress().toString()));
         }
+
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
-        List<Reservation> reservations =
-                reservationService.initializeReservation(accommodationDTO.getReservations()
-                        , accommodation.getAccommodationId());
-        if (accommodationDTO.getReservations() != null) {
-            savedAccommodation.setReservations(reservations);
-            accommodationRepository.save(savedAccommodation);
+
+        List<Reservation> reservations = reservationService.initializeReservation(accommodationDTO.getReservations(),
+                savedAccommodation.getAccommodationId());
+        for (Reservation reservation : reservations) {
+            savedAccommodation.addReservation(reservation); // Add reservations to the accommodation
         }
+
+        accommodationRepository.save(savedAccommodation); // Save the accommodation with reservations
     }
 
     /**
@@ -65,31 +67,29 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public AccommodationDTO getAccommodationByName(String name) {
         Accommodation accommodation = accommodationRepository.findByName(name).orElseThrow(
-                () -> new ResourceNotFoundException("Accommodation"
-                        , "AccommodationId", name));
+                () -> new ResourceNotFoundException("Accommodation", "Accommodation name", name));
 
         return AccommodationMapper.mapAccommodationToAccommodationDTO(accommodation);
     }
 
     /**
      * @param accommodationDTO updated accommodation
-     * @return AccommodationDTO
+     * @return boolean indicating success
      */
     @Override
     public boolean updateAccommodation(AccommodationDTO accommodationDTO) {
-        Accommodation accommodation =accommodationRepository.findByNameAndAddress_CityAndAddress_Street(
+        Accommodation existingAccommodation = accommodationRepository.findByNameAndAddress_CityAndAddress_Street(
                 accommodationDTO.getName(),
                 accommodationDTO.getAddress().getCity(),
                 accommodationDTO.getAddress().getStreet()
         ).orElseThrow(
                 () -> new ResourceNotFoundException("Accommodation",
-                        "accommodation name,accommodation city, accommodation street",
-                        String.join(", ", accommodationDTO.getName(),
-                                accommodationDTO.getAddress().toString())
+                        "accommodation name, accommodation city, accommodation street",
+                        String.join(", ", accommodationDTO.getName(), accommodationDTO.getAddress().toString())
                 ));
+
         Accommodation updatedAccommodation = AccommodationMapper.mapAccommodationDTOToAccommodation(accommodationDTO);
-        updatedAccommodation.setAccommodationId(accommodation.getAccommodationId());
-        updatedAccommodation.setReservations(accommodation.getReservations());
+        updatedAccommodation.setAccommodationId(existingAccommodation.getAccommodationId());
         accommodationRepository.save(updatedAccommodation);
 
         return true;
@@ -99,7 +99,7 @@ public class AccommodationServiceImpl implements AccommodationService {
      * @param name
      * @param city
      * @param street
-     * @return boolean is deleted or not
+     * @return boolean indicating if deletion was successful
      */
     @Override
     public boolean deleteAccommodation(String name, String city, String street) {
@@ -107,10 +107,10 @@ public class AccommodationServiceImpl implements AccommodationService {
                         name, city, street)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Accommodation",
-                                "accommodation name,accommodation city, accommodation street",
-                                String.join(", ", name,
-                                        city, street)
+                                "accommodation name, accommodation city, accommodation street",
+                                String.join(", ", name, city, street)
                         ));
+        // Notify Reservation Service to handle associated reservations
         reservationService.deleteByAccommodationId(accommodation.getAccommodationId());
         accommodationRepository.deleteById(accommodation.getAccommodationId());
 
