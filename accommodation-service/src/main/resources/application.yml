@@ -23,9 +23,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
-  sql:
-    init:
-      mode: always
   config:
     import: "optional:configserver:http://localhost:8071/"
 
