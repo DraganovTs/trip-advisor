@@ -21,6 +21,7 @@
         <module>common</module>
         <module>recommendation-service</module>
         <module>configserver</module>
+        <module>eurekaserver</module>
     </modules>
 
     <properties>
@@ -137,6 +138,16 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+                <version>${spring.cloud.config.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+                <version>${spring.cloud.config.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
                 <version>${spring.cloud.config.version}</version>
             </dependency>
         </dependencies>
