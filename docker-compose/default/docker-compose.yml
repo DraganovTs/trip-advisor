@@ -33,7 +33,7 @@ services:
       service: microservice-db-config
 
   configserver:
-    image: "tzetzaka2/configserver:s4"
+    image: "tzetzaka2/configserver:s5"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -48,7 +48,7 @@ services:
       service: microservice-base-config
 
   eurekaserver:
-    image: "tzetzaka2/eurekaserver:s4"
+    image: "tzetzaka2/eurekaserver:s5"
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -65,10 +65,16 @@ services:
       service: microservice-configserver-config
 
   accommodation-service:
-    image: "tzetzaka2/accommodation-service:s4"
+    image: "tzetzaka2/accommodation-service:s5"
     container_name: accommodation-ms
     ports:
       - "8080:8080"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "accommodation"
       SPRING_DATASOURCE_URL: "jdbc:mysql://accommodationdb:3306/accommodationdb"
@@ -81,10 +87,16 @@ services:
 
 
   recommendation-service:
-    image: "tzetzaka2/recommendation-service:s4"
+    image: "tzetzaka2/recommendation-service:s5"
     container_name: recommendation-ms
     ports:
       - "8090:8090"
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "recommendation"
       SPRING_DATASOURCE_URL: "jdbc:mysql://recommendationdb:3306/recommendationdb"
@@ -97,10 +109,16 @@ services:
 
 
   events-service:
-    image: "tzetzaka2/events-service:s4"
+    image: "tzetzaka2/events-service:s5"
     container_name: events-ms
     ports:
       - "9000:9000"
+    healthcheck:
+      test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "events"
       SPRING_DATASOURCE_URL: "jdbc:mysql://eventsdb:3306/eventsdb"
@@ -111,6 +129,23 @@ services:
       file: common-config.yml
       service: microservice-eureka-config
 
+  gatewayserver:
+    image: "tzetzaka2/gatewayserver:s5"
+    container_name: gatewayserver-ms
+    ports:
+      - "8072:8072"
+    depends_on:
+      accommodation-service:
+        condition: service_healthy
+      events-service:
+        condition: service_healthy
+      recommendation-service:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
 
 networks:
   tripadvisor:

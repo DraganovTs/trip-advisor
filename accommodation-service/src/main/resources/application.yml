@@ -36,16 +36,27 @@ spring:
 
 logging:
   level:
-    org.springframework.boot.actuate: DEBUG
+    com:
+      trip:
+        advisor:
+          accommodation: DEBUG
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
   endpoint:
     shutdown:
       enabled: true
+    health:
+      probes:
+        enabled: true
   info:
     env:
       enabled: true

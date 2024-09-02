@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9000
 spring:
   application:
     name: "events"
@@ -25,16 +25,27 @@ spring:
 
 logging:
   level:
-    org.springframework.boot.actuate: DEBUG
+    com:
+      trip:
+        advisor:
+          events: DEBUG
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
   endpoint:
     shutdown:
       enabled: true
+    health:
+      probes:
+        enabled: true
   info:
     env:
       enabled: true
