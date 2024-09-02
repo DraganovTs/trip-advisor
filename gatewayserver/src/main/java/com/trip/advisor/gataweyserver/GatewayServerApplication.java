@@ -7,6 +7,8 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDateTime;
+
 @SpringBootApplication
 public class GatewayServerApplication {
     public static void main(String[] args) {
@@ -19,17 +21,20 @@ public class GatewayServerApplication {
                 .route(p -> p
                         .path("/tripadvisor/accommodation/**")
                         .filters(f -> f.rewritePath("/tripadvisor/accommodation/(?<segment>.*)",
-                                "/${segment}"))
+                                "/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://ACCOMMODATION"))
                 .route(p -> p
                         .path("/tripadvisor/events/**")
                         .filters(f -> f.rewritePath("/tripadvisor/events/(?<segment>.*)",
-                                "/${segment}"))
+                                "/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://EVENTS"))
                 .route(p -> p
                         .path("/tripadvisor/recommendation/**")
                         .filters(f -> f.rewritePath("/tripadvisor/recommendation/(?<segment>.*)",
-                                "/${segment}"))
+                                "/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://RECOMMENDATION"))
                 .build();
     }
