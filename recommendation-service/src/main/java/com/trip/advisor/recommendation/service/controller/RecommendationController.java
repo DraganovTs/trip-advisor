@@ -28,7 +28,7 @@ import java.util.List;
         description = "CRUD REST APIs in TripAdvisor to CREATE, UPDATE, FETCH, and DELETE recommendation details"
 )
 @RestController
-@RequestMapping(value = "/api/recommendation", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class RecommendationController {
 
     private final RecommendationServiceImpl recommendationService;

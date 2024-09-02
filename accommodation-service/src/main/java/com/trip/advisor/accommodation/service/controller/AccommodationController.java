@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
         description = "CRUD REST APIs in TripAdvisor to CREATE, UPDATE, FETCH, and DELETE accommodation details"
 )
 @RestController
-@RequestMapping(path = "/api/accommodation", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class AccommodationController {
 
