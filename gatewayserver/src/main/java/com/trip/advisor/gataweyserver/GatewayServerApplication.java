@@ -21,19 +21,21 @@ public class GatewayServerApplication {
                 .route(p -> p
                         .path("/tripadvisor/accommodation/**")
                         .filters(f -> f.rewritePath("/tripadvisor/accommodation/(?<segment>.*)",
-                                "/${segment}")
-                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+                                        "/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                .circuitBreaker(config -> config.setName("accommodationCircuitBreaker")
+                                        .setFallbackUri("forward:/contactSupport")))
                         .uri("lb://ACCOMMODATION"))
                 .route(p -> p
                         .path("/tripadvisor/events/**")
                         .filters(f -> f.rewritePath("/tripadvisor/events/(?<segment>.*)",
-                                "/${segment}")
+                                        "/${segment}")
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://EVENTS"))
                 .route(p -> p
                         .path("/tripadvisor/recommendation/**")
                         .filters(f -> f.rewritePath("/tripadvisor/recommendation/(?<segment>.*)",
-                                "/${segment}")
+                                        "/${segment}")
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://RECOMMENDATION"))
                 .build();
