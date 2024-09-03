@@ -95,8 +95,8 @@ public class AccommodationController {
             responseCode = "200",
             description = "HTTP Status OK"
     )
-    @GetMapping("/fetchAllByType")
-    public ResponseEntity<List<AccommodationDTO>> fetchAllByType(@RequestParam
+    @GetMapping("/fetchAllByType/{type}")
+    public ResponseEntity<List<AccommodationDTO>> fetchAllByType(@PathVariable
                                                                  String type) {
         List<AccommodationDTO> accommodationDTOList = accommodationService.getAccommodationsByType(type);
 
