@@ -16,6 +16,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
 
+
     public ReservationServiceImpl(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
@@ -84,7 +85,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> initializeReservation(List<ReservationDTO> reservations, Long accommodationId) {
         if (reservations == null) {
-            return new ArrayList<>();
+            reservations = new ArrayList<>();
         }
 
         List<Reservation> reservationList = new ArrayList<>();

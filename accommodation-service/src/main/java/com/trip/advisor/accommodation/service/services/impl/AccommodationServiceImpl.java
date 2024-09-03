@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
@@ -80,16 +81,20 @@ public class AccommodationServiceImpl implements AccommodationService {
      */
     @Override
     public List<AccommodationDTO> getAccommodationsByType(String type) {
+        try {
+            AccommodationType accommodationType = AccommodationType.valueOf(type.toUpperCase());
 
-        List<Accommodation> accommodations = accommodationRepository.findByType(AccommodationType.valueOf(type))
-                .orElseThrow(() -> new ResourceNotFoundException("Accommodation", "Accommodation type", type));
+            List<Accommodation> accommodations = accommodationRepository.findByType(accommodationType)
+                    .orElseThrow(() -> new ResourceNotFoundException("Accommodation", "Accommodation type", type));
 
-        List<AccommodationDTO> accommodationDTOList = new ArrayList<>();
-        for (Accommodation accommodation : accommodations) {
-            accommodationDTOList.add(AccommodationMapper.mapAccommodationToAccommodationDTO(accommodation));
+            return accommodations.stream()
+                    .map(AccommodationMapper::mapAccommodationToAccommodationDTO)
+                    .collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            throw new ResourceNotFoundException("Accommodation", "Accommodation type", type);
+        } catch (Exception e) {
+            throw new RuntimeException("An unexpected error occurred", e);
         }
-
-        return accommodationDTOList;
     }
 
 
