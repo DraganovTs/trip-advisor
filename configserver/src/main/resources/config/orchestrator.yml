@@ -1,0 +1,10 @@
+build:
+  version: "1.0"
+
+accommodation:
+  message: "Welcome to tripadvisor orchestrator service"
+  contactDetails:
+    name: "Mr Tze"
+    email: "tze@gmail.com"
+  onCallSupport:
+    -(888)888-888

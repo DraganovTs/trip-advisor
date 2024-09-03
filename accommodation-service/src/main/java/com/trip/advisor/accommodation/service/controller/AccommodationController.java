@@ -23,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(
         name = "CRUD REST API for Accommodations in TripAdvisor",
         description = "CRUD REST APIs in TripAdvisor to CREATE, UPDATE, FETCH, and DELETE accommodation details"
@@ -83,6 +85,24 @@ public class AccommodationController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(accommodationDTO);
+    }
+
+    @Operation(
+            summary = "Fetch accommodation REST API",
+            description = "REST API to fetch accommodation details by type in TripAdvisor"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status OK"
+    )
+    @GetMapping("/fetchAllByType")
+    public ResponseEntity<List<AccommodationDTO>> fetchAllByType(@RequestParam
+                                                                 String type) {
+        List<AccommodationDTO> accommodationDTOList = accommodationService.getAccommodationsByType(type);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(accommodationDTOList);
     }
 
     @Operation(

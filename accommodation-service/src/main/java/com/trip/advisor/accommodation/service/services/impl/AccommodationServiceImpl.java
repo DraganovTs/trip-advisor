@@ -1,6 +1,7 @@
 package com.trip.advisor.accommodation.service.services.impl;
 
 import com.trip.advisor.accommodation.service.exception.AccommodationAlreadyExistException;
+import com.trip.advisor.accommodation.service.model.enums.AccommodationType;
 import com.trip.advisor.common.exception.ResourceNotFoundException;
 import com.trip.advisor.accommodation.service.mapper.AccommodationMapper;
 import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
@@ -11,6 +12,7 @@ import com.trip.advisor.accommodation.service.services.AccommodationService;
 import com.trip.advisor.accommodation.service.services.ReservationService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,6 +73,25 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         return AccommodationMapper.mapAccommodationToAccommodationDTO(accommodation);
     }
+
+    /**
+     * @param type
+     * @return list of accommodations
+     */
+    @Override
+    public List<AccommodationDTO> getAccommodationsByType(String type) {
+
+        List<Accommodation> accommodations = accommodationRepository.findByType(AccommodationType.valueOf(type))
+                .orElseThrow(() -> new ResourceNotFoundException("Accommodation", "Accommodation type", type));
+
+        List<AccommodationDTO> accommodationDTOList = new ArrayList<>();
+        for (Accommodation accommodation : accommodations) {
+            accommodationDTOList.add(AccommodationMapper.mapAccommodationToAccommodationDTO(accommodation));
+        }
+
+        return accommodationDTOList;
+    }
+
 
     /**
      * @param accommodationDTO updated accommodation

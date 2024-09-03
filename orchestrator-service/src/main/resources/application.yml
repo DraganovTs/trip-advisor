@@ -3,3 +3,62 @@ server:
 spring:
   application:
     name: "orchestrator"
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+  threads:
+    virtual:
+      enabled: false
+
+logging:
+  level:
+    com:
+      trip:
+        advisor:
+          orchestrator: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8070/eureka/
+
+info:
+  app:
+    name: "orchestrator"
+    description: "Tripadvisor Orchestrator Application"
+    version: "1.0.0"
+
+accommodation:
+  service:
+    url: "http://localhost:8080/api/fetchAllByType/"
+
+events:
+  service:
+    url: "http://localhost:9000/api/events/getByCity/"
+
+recommendation:
+  service:
+    url: "http://localhost:8090/api/fetch/"

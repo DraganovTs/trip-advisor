@@ -29,6 +29,13 @@ public interface AccommodationService {
 
     /**
      *
+     * @param type
+     * @return list of accommodations
+     */
+    List<AccommodationDTO> getAccommodationsByType(String type);
+
+    /**
+     *
      * @param accommodationDTO updated accommodation
      * @return AccommodationDTO
      */
