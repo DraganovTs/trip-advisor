@@ -1,7 +1,7 @@
 build:
   version: "2.0"
 
-accommodation:
+events:
   message: "Welcome to tripadvisor events related Production APIs"
   contactDetails:
     name: "Ivan Ivanov"
