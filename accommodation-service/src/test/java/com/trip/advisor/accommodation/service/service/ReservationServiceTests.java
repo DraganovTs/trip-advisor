@@ -6,7 +6,6 @@ import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.repository.ReservationRepository;
 import com.trip.advisor.accommodation.service.services.impl.ReservationServiceImpl;
 import com.trip.advisor.common.exception.ResourceNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
