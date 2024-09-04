@@ -1,7 +1,7 @@
 build:
   version: "3.0"
 
-accommodation:
+recommendation:
   message: "Welcome to tripadvisor recommendation related Production APIs"
   contactDetails:
     name: "Ivan Ivanov"

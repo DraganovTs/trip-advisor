@@ -1,6 +1,7 @@
 package com.trip.advisor.recommendation.service.repository;
 
 import com.trip.advisor.recommendation.service.model.entity.Recommendation;
+import com.trip.advisor.recommendation.service.model.enums.RecommendationType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,6 @@ public interface RecommendationRepository extends JpaRepository<Recommendation, 
 
     Optional<List<Recommendation>> findAllByCity(String city);
 
-    Optional<List<Recommendation>> findAllByCityAndType(String city, String type);
+    Optional<List<Recommendation>> findAllByCityAndType(String city, RecommendationType type);
 
 }

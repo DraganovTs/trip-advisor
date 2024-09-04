@@ -5,6 +5,7 @@ import com.trip.advisor.recommendation.service.exception.RecommendationAlreadyEx
 import com.trip.advisor.recommendation.service.mapper.RecommendationMapper;
 import com.trip.advisor.recommendation.service.model.dto.RecommendationDTO;
 import com.trip.advisor.recommendation.service.model.entity.Recommendation;
+import com.trip.advisor.recommendation.service.model.enums.RecommendationType;
 import com.trip.advisor.recommendation.service.repository.RecommendationRepository;
 import com.trip.advisor.recommendation.service.service.RecommendationService;
 import org.springframework.stereotype.Service;
@@ -82,7 +83,8 @@ public class RecommendationServiceImpl implements RecommendationService {
      */
     @Override
     public List<RecommendationDTO> getRecommendationByCityAndType(String city, String type) {
-        List<Recommendation> recommendationsInCity = recommendationRepository.findAllByCityAndType(city, type)
+        List<Recommendation> recommendationsInCity = recommendationRepository.findAllByCityAndType(city,
+                        RecommendationType.valueOf(type))
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Recommendation", "City and Type",
                                 String.join(city, type)));
