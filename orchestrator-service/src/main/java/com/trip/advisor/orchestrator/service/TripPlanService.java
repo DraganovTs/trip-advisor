@@ -26,13 +26,13 @@ public class TripPlanService {
 
     public TripPlanDTO getTripPlan(String type, String city) {
         var accommodations = this.executor.submit(() -> this.accommodationServiceClient.getAccommodationsByType(type));
-        var events = this.executor.submit(() -> this.eventServiceClient.getAllEventsInCity(city));
-        var recommendations = this.executor.submit(() -> this.recommendationServiceClient.getAllRecommendationsInCity(city));
+//        var events = this.executor.submit(() -> this.eventServiceClient.getAllEventsInCity(city));
+//        var recommendations = this.executor.submit(() -> this.recommendationServiceClient.getAllRecommendationsInCity(city));
 
         return new TripPlanDTO(
                 getOrElse(accommodations, Collections.emptyList()),
-                getOrElse(events,Collections.emptyList()),
-                getOrElse(recommendations,Collections.emptyList())
+                null,
+                null
         );
     }
 
