@@ -136,7 +136,6 @@ public class AccommodationServiceImpl implements AccommodationService {
                                 "accommodation name, accommodation city, accommodation street",
                                 String.join(", ", name, city, street)
                         ));
-        // Notify Reservation Service to handle associated reservations
         reservationService.deleteByAccommodationId(accommodation.getAccommodationId());
         accommodationRepository.deleteById(accommodation.getAccommodationId());
 

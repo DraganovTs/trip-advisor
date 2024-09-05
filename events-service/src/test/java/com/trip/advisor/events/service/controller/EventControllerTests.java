@@ -2,7 +2,6 @@ package com.trip.advisor.events.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trip.advisor.events.service.model.dto.EventDTO;
-import com.trip.advisor.events.service.model.dto.EventsContactInfoDTO;
 import com.trip.advisor.events.service.services.impl.EventServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,13 +20,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -36,8 +32,10 @@ public class EventControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private EventServiceImpl eventService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -55,7 +53,7 @@ public class EventControllerTests {
     }
 
     @Test
-    void testCreateEvent() throws Exception {
+    void testCreateEvent_Success() throws Exception {
         Mockito.doNothing().when(eventService).createEvent(any(EventDTO.class));
 
         mockMvc.perform(post("/api/events/create")
@@ -67,7 +65,19 @@ public class EventControllerTests {
     }
 
     @Test
-    void testUpdateEvent() throws Exception {
+    void testCreateEvent_Failure() throws Exception {
+        Mockito.doThrow(new RuntimeException("Event creation failed")).when(eventService).createEvent(any(EventDTO.class));
+
+        mockMvc.perform(post("/api/events/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(eventDTO)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(jsonPath("$.errorMessage").value("Event creation failed"));
+    }
+
+    @Test
+    void testUpdateEvent_Success() throws Exception {
         Mockito.when(eventService.updateEvent(any(EventDTO.class))).thenReturn(true);
 
         mockMvc.perform(put("/api/events/update")
@@ -79,7 +89,19 @@ public class EventControllerTests {
     }
 
     @Test
-    void testDeleteEvent() throws Exception {
+    void testUpdateEvent_Failure() throws Exception {
+        Mockito.when(eventService.updateEvent(any(EventDTO.class))).thenReturn(false);
+
+        mockMvc.perform(put("/api/events/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(eventDTO)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.statusCode").value("500"))
+                .andExpect(jsonPath("$.statusMessage").value("An error occurred.Please try again or contact Dev team"));
+    }
+
+    @Test
+    void testDeleteEvent_Success() throws Exception {
         String eventName = "Test Event";
         Mockito.when(eventService.deleteEvent(eventName)).thenReturn(true);
 
@@ -89,9 +111,19 @@ public class EventControllerTests {
                 .andExpect(jsonPath("$.statusMessage").value("Request processed successfully"));
     }
 
+    @Test
+    void testDeleteEvent_Failure() throws Exception {
+        String eventName = "Test Event";
+        Mockito.when(eventService.deleteEvent(eventName)).thenReturn(false);
+
+        mockMvc.perform(delete("/api/events/delete/{name}", eventName))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.statusCode").value("500"))
+                .andExpect(jsonPath("$.statusMessage").value("An error occurred.Please try again or contact Dev team"));
+    }
 
     @Test
-    void testGetEventsByDate() throws Exception {
+    void testGetEventsByDate_Success() throws Exception {
         LocalDate date = LocalDate.now().plusDays(3L);
         Mockito.when(eventService.getEventsByDate(date)).thenReturn(Collections.singletonList(eventDTO));
 
@@ -101,9 +133,19 @@ public class EventControllerTests {
                 .andExpect(jsonPath("$[0].city").value(eventDTO.getCity()));
     }
 
+    @Test
+    void testGetEventsByDate_Failure() throws Exception {
+        LocalDate date = LocalDate.now().plusDays(3L);
+        Mockito.when(eventService.getEventsByDate(date)).thenThrow(new RuntimeException("Error fetching events"));
+
+        mockMvc.perform(get("/api/events/getByDate/{date}", date))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(jsonPath("$.errorMessage").value("Error fetching events"));
+    }
 
     @Test
-    void testGetAllEventsInCity() throws Exception {
+    void testGetAllEventsInCity_Success() throws Exception {
         String city = "Test City";
         Mockito.when(eventService.getAllEventsInCity(city)).thenReturn(Collections.singletonList(eventDTO));
 
@@ -113,9 +155,19 @@ public class EventControllerTests {
                 .andExpect(jsonPath("$[0].city").value(eventDTO.getCity()));
     }
 
+    @Test
+    void testGetAllEventsInCity_Failure() throws Exception {
+        String city = "Test City";
+        Mockito.when(eventService.getAllEventsInCity(city)).thenThrow(new RuntimeException("Error fetching events"));
+
+        mockMvc.perform(get("/api/events/getByCity/{city}", city))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(jsonPath("$.errorMessage").value("Error fetching events"));
+    }
 
     @Test
-    void testGetAllEventByCityAndTimePeriod() throws Exception {
+    void testGetAllEventByCityAndTimePeriod_Success() throws Exception {
         String city = "Test City";
         LocalDate startDate = LocalDate.now().plusDays(1);
         LocalDate endDate = LocalDate.now().plusDays(10);
@@ -131,6 +183,22 @@ public class EventControllerTests {
                 .andExpect(jsonPath("$[0].city").value(eventDTO.getCity()));
     }
 
+    @Test
+    void testGetAllEventByCityAndTimePeriod_Failure() throws Exception {
+        String city = "Test City";
+        LocalDate startDate = LocalDate.now().plusDays(1);
+        LocalDate endDate = LocalDate.now().plusDays(10);
+        Mockito.when(eventService.getAllEventByCityAndTimePeriod(city, startDate, endDate))
+                .thenThrow(new RuntimeException("Error fetching events"));
+
+        mockMvc.perform(get("/api/events/getByCityAndTime")
+                        .param("city", city)
+                        .param("startDate", startDate.toString())
+                        .param("endDate", endDate.toString()))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(jsonPath("$.errorMessage").value("Error fetching events"));
+    }
 
     @Test
     void testGetBuildVersion() throws Exception {
@@ -147,8 +215,6 @@ public class EventControllerTests {
 
     @Test
     void getContactInfo_Success() throws Exception {
-
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/events/contact-info")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -162,8 +228,4 @@ public class EventControllerTests {
                         .value("-(888)888-888 -(777)777-777"))
                 .andDo(MockMvcResultHandlers.print());
     }
-
-
-
-
 }

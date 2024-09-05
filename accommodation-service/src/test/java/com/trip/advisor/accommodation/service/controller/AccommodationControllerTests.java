@@ -19,28 +19,29 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-@SpringBootTest()
+@SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 public class AccommodationControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private AccommodationServiceImpl accommodationService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
+    // Success tests
 
     @Test
     void createAccommodation_Success() throws Exception {
-        // Arrange
         AddressDTO addressDTO = AddressDTO.builder()
                 .street("Vitoshka")
                 .country("Bulgaria")
@@ -49,7 +50,7 @@ public class AccommodationControllerTests {
                 .postalCode("1000")
                 .build();
 
-        AccommodationDTO accommodationDTO =AccommodationDTO.builder()
+        AccommodationDTO accommodationDTO = AccommodationDTO.builder()
                 .name("Test")
                 .price(15.00)
                 .type("HOTEL")
@@ -58,7 +59,6 @@ public class AccommodationControllerTests {
                 .reservations(new ArrayList<>())
                 .build();
 
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/api/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(accommodationDTO)))
@@ -67,14 +67,11 @@ public class AccommodationControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.statusMessage").value(AccommodationConstants.MESSAGE_201))
                 .andDo(MockMvcResultHandlers.print());
 
-        // Verify service interaction
         verify(accommodationService).createAccommodation(accommodationDTO);
     }
 
-
     @Test
     void fetchAccommodation_Success() throws Exception {
-        // Arrange
         String name = "Test";
         AccommodationDTO accommodationDTO = AccommodationDTO.builder()
                 .name(name)
@@ -86,7 +83,6 @@ public class AccommodationControllerTests {
 
         when(accommodationService.getAccommodationByName(name)).thenReturn(accommodationDTO);
 
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/fetch")
                         .param("name", name)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -95,13 +91,11 @@ public class AccommodationControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(15.00))
                 .andDo(MockMvcResultHandlers.print());
 
-        // Verify service interaction
         verify(accommodationService).getAccommodationByName(name);
     }
 
     @Test
     void fetchAllByType_Success() throws Exception {
-        // Arrange
         String type = "HOTEL";
         List<AccommodationDTO> accommodationDTOList = new ArrayList<>();
         accommodationDTOList.add(AccommodationDTO.builder()
@@ -114,7 +108,6 @@ public class AccommodationControllerTests {
 
         when(accommodationService.getAccommodationsByType(type)).thenReturn(accommodationDTOList);
 
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/fetchAllByType/{type}", type)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -122,13 +115,11 @@ public class AccommodationControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Test"))
                 .andDo(MockMvcResultHandlers.print());
 
-        // Verify service interaction
         verify(accommodationService).getAccommodationsByType(type);
     }
 
     @Test
     void updateAccommodation_Success() throws Exception {
-        // Arrange
         AccommodationDTO accommodationDTO = AccommodationDTO.builder()
                 .name("Test")
                 .price(20.00)
@@ -139,7 +130,6 @@ public class AccommodationControllerTests {
 
         when(accommodationService.updateAccommodation(accommodationDTO)).thenReturn(true);
 
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(accommodationDTO)))
@@ -148,20 +138,17 @@ public class AccommodationControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.statusMessage").value(Constants.MESSAGE_200))
                 .andDo(MockMvcResultHandlers.print());
 
-        // Verify service interaction
         verify(accommodationService).updateAccommodation(accommodationDTO);
     }
 
     @Test
     void deleteAccommodation_Success() throws Exception {
-        // Arrange
         String name = "Test";
         String city = "Sofia";
         String street = "Vitoshka";
 
         when(accommodationService.deleteAccommodation(name, city, street)).thenReturn(true);
 
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/delete")
                         .param("name", name)
                         .param("city", city)
@@ -172,13 +159,11 @@ public class AccommodationControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.statusMessage").value(Constants.MESSAGE_200))
                 .andDo(MockMvcResultHandlers.print());
 
-        // Verify service interaction
         verify(accommodationService).deleteAccommodation(name, city, street);
     }
 
     @Test
     void getBuildVersion_Success() throws Exception {
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/build-info")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -187,7 +172,6 @@ public class AccommodationControllerTests {
 
     @Test
     void getJavaVersion_Success() throws Exception {
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/java-version")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -196,7 +180,6 @@ public class AccommodationControllerTests {
 
     @Test
     void getContactInfo_Success() throws Exception {
-        // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/api/contact-info")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -212,4 +195,101 @@ public class AccommodationControllerTests {
     }
 
 
+    @Test
+    void createAccommodation_Failure() throws Exception {
+        AddressDTO addressDTO = AddressDTO.builder()
+                .street("Vitoshka")
+                .country("Bulgaria")
+                .state("Sofia")
+                .city("Sofia")
+                .postalCode("1000")
+                .build();
+
+        AccommodationDTO accommodationDTO = AccommodationDTO.builder()
+                .name("Test")
+                .price(15.00)
+                .type("HOTEL")
+                .rating(5.00)
+                .address(addressDTO)
+                .reservations(new ArrayList<>())
+                .build();
+
+        // Simulate a failure in the service layer
+        doThrow(new RuntimeException("Creation failed")).when(accommodationService).createAccommodation(accommodationDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(accommodationDTO)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value("Creation failed"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void fetchAccommodation_Failure() throws Exception {
+        String name = "Test";
+        when(accommodationService.getAccommodationByName(name)).thenThrow(new RuntimeException("Error fetching accommodation"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/fetch")
+                        .param("name", name)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value("Error fetching accommodation"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void fetchAllByType_Failure() throws Exception {
+        String type = "HOTEL";
+        when(accommodationService.getAccommodationsByType(type)).thenThrow(new RuntimeException("Error fetching accommodations"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/fetchAllByType/{type}", type)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value("Error fetching accommodations"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void updateAccommodation_Failure() throws Exception {
+        AccommodationDTO accommodationDTO = AccommodationDTO.builder()
+                .name("Test")
+                .price(20.00)
+                .type("HOTEL")
+                .rating(4.50)
+                .address(new AddressDTO("Vitoshka", "Sofia", "Sofia", "Bulgaria", "1000"))
+                .build();
+
+        when(accommodationService.updateAccommodation(accommodationDTO)).thenThrow(new RuntimeException("Update failed"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(accommodationDTO)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value("Update failed"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void deleteAccommodation_Failure() throws Exception {
+        String name = "Test";
+        String city = "Sofia";
+        String street = "Vitoshka";
+
+        when(accommodationService.deleteAccommodation(name, city, street)).thenThrow(new RuntimeException("Deletion failed"));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/delete")
+                        .param("name", name)
+                        .param("city", city)
+                        .param("street", street)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value("Deletion failed"))
+                .andDo(MockMvcResultHandlers.print());
+    }
 }

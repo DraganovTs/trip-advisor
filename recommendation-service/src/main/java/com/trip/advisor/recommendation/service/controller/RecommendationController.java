@@ -130,18 +130,20 @@ public class RecommendationController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping("/delete")
-   public ResponseEntity<ResponseDTO> deleteRecommendationByCityAndName(@PathVariable String city,
-                                                                        @PathVariable String name){
-        boolean isDeleted = recommendationService.deleteByCityAndName(city,name);
+    public ResponseEntity<ResponseDTO> deleteRecommendationByCityAndName(
+            @RequestParam String city,
+            @RequestParam String name) {
 
-        if (isDeleted){
+        boolean isDeleted = recommendationService.deleteByCityAndName(city, name);
+
+        if (isDeleted) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(new ResponseDTO(Constants.STATUS_500,Constants.MESSAGE_500));
-        }else {
+                    .body(new ResponseDTO(Constants.STATUS_200, Constants.MESSAGE_200));
+        } else {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(Constants.STATUS_500,Constants.MESSAGE_500));
+                    .body(new ResponseDTO(Constants.STATUS_500, Constants.MESSAGE_500));
         }
     }
 

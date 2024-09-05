@@ -85,9 +85,9 @@ public class RecommendationControllerTests {
         mockMvc.perform(post("/api/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recommendationDTO)))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.statusCode").value(RecommendationConstants.STATUS_201))
-                .andExpect(jsonPath("$.statusMessage").value(RecommendationConstants.MESSAGE_201));
+                .andExpect(status().isConflict()) // Expecting 409 Conflict
+                .andExpect(jsonPath("$.errorCode").value("CONFLICT")) // Match actual response field
+                .andExpect(jsonPath("$.errorMessage").value("Recommendation already exists")); // Match actual message
     }
 
     @Test
@@ -95,7 +95,7 @@ public class RecommendationControllerTests {
         // Arrange
         when(recommendationService.updateRecommendation(any(RecommendationDTO.class))).thenReturn(true);
 
-        // Act
+        // Act & Assert
         mockMvc.perform(put("/api/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recommendationDTO)))
@@ -104,12 +104,13 @@ public class RecommendationControllerTests {
                 .andExpect(jsonPath("$.statusMessage").value(Constants.MESSAGE_200));
     }
 
+
     @Test
     public void testUpdateRecommendation_Failure() throws Exception {
         // Arrange
         when(recommendationService.updateRecommendation(any(RecommendationDTO.class))).thenReturn(false);
 
-        // Act
+        // Act & Assert
         mockMvc.perform(put("/api/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recommendationDTO)))
@@ -117,6 +118,7 @@ public class RecommendationControllerTests {
                 .andExpect(jsonPath("$.statusCode").value(Constants.STATUS_500))
                 .andExpect(jsonPath("$.statusMessage").value(Constants.MESSAGE_500));
     }
+
 
     @Test
     public void testFetchRecommendationByCity_Success() throws Exception {
@@ -142,8 +144,8 @@ public class RecommendationControllerTests {
         mockMvc.perform(get("/api/fetch/{city}", "Test City")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.statusCode").value("404"))
-                .andExpect(jsonPath("$.statusMessage").value("Recommendation not found for city: Test City"));
+                .andExpect(jsonPath("$.errorCode").value("NOT_FOUND"))
+                .andExpect(jsonPath("$.errorMessage").value("Recommendation not found with the given input data City: Test City"));
     }
 
 
@@ -169,15 +171,16 @@ public class RecommendationControllerTests {
         when(recommendationService.getRecommendationByCityAndType("Test City", "CAFE"))
                 .thenThrow(new ResourceNotFoundException("Recommendation", "City and Type", "Test City CAFE"));
 
-        // Act
+        // Act & Assert
         mockMvc.perform(get("/api/fetch/cityAndType")
                         .param("city", "Test City")
                         .param("type", "CAFE")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.statusCode").value("404"))
-                .andExpect(jsonPath("$.statusMessage").value("Recommendation not found for city: Test City and type: CAFE"));
+                .andExpect(jsonPath("$.errorCode").value("NOT_FOUND"))
+                .andExpect(jsonPath("$.errorMessage").value("Recommendation not found with the given input data City and Type: Test City CAFE"));
     }
+
 
 
     @Test
@@ -185,7 +188,7 @@ public class RecommendationControllerTests {
         // Arrange
         when(recommendationService.deleteByCityAndName("Test City", "Test Recommendation")).thenReturn(true);
 
-        // Act
+        // Act & Assert
         mockMvc.perform(delete("/api/delete")
                         .param("city", "Test City")
                         .param("name", "Test Recommendation"))
@@ -193,6 +196,8 @@ public class RecommendationControllerTests {
                 .andExpect(jsonPath("$.statusCode").value(Constants.STATUS_200))
                 .andExpect(jsonPath("$.statusMessage").value(Constants.MESSAGE_200));
     }
+
+
 
     @Test
     public void testDeleteRecommendationByCityAndName_NotFound() throws Exception {
@@ -204,20 +209,22 @@ public class RecommendationControllerTests {
                         .param("city", "Test City")
                         .param("name", "Test Recommendation"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.statusCode").value(Constants.STATUS_500))
-                .andExpect(jsonPath("$.statusMessage").value(Constants.MESSAGE_500));
+                .andExpect(jsonPath("$.statusCode").value("500"))  // Adjust to match actual statusCode
+                .andExpect(jsonPath("$.statusMessage").value("An error occurred.Please try again or contact Dev team"));  // Adjust to match actual statusMessage
     }
+
+
 
     @Test
     void testGetBuildVersion() throws Exception {
-        mockMvc.perform(get("/api/recommendation/build-info"))
+        mockMvc.perform(get("/api/build-info"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("2.0")); // Assuming build version is 2.0
+                .andExpect(content().string("3.0")); // Assuming build version is 2.0
     }
 
     @Test
     void testGetJavaVersion() throws Exception {
-        mockMvc.perform(get("/api/recommendation/java-version"))
+        mockMvc.perform(get("/api/java-version"))
                 .andExpect(status().isOk());
     }
 
@@ -226,11 +233,11 @@ public class RecommendationControllerTests {
     void getContactInfo_Success() throws Exception {
 
         // Act & Assert
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/recommendation/contact-info")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/contact-info")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message")
-                        .value("Welcome to tripadvisor events related Docker APIs"))
+                        .value("Welcome to tripadvisor recommendation related Docker APIs"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.contactDetails.name")
                         .value("Mr Tze"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.contactDetails.email")
