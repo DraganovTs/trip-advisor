@@ -30,13 +30,17 @@ public class GatewayServerApplication {
                         .path("/tripadvisor/events/**")
                         .filters(f -> f.rewritePath("/tripadvisor/events/(?<segment>.*)",
                                         "/${segment}")
-                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+
+                                .circuitBreaker(config -> config.setName("eventCircuitBreaker")
+                                        .setFallbackUri("forward:/contactSupport")))
                         .uri("lb://EVENTS"))
                 .route(p -> p
                         .path("/tripadvisor/recommendation/**")
                         .filters(f -> f.rewritePath("/tripadvisor/recommendation/(?<segment>.*)",
                                         "/${segment}")
-                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                .circuitBreaker(config -> config.setName("recommendationCircuitBreaker")))
                         .uri("lb://RECOMMENDATION"))
                 .build();
     }
