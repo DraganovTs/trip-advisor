@@ -34,7 +34,7 @@ public class Reservation {
     private String guestEmail;
 
     @Column(name = "accommodation_id", nullable = false)
-    private Long accommodationId; // Store the accommodation ID
+    private Long accommodationId;
 
 
 
