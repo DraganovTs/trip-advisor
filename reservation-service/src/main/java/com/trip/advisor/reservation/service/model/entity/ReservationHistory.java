@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 public class ReservationHistory {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Column(name = "reservationId")
     private UUID reservationId;
