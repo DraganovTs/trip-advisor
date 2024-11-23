@@ -7,6 +7,8 @@ import com.trip.advisor.reservation.service.model.dto.CreateReservationResponseD
 import com.trip.advisor.reservation.service.model.entity.Reservation;
 import com.trip.advisor.reservation.service.repository.ReservationRepository;
 import com.trip.advisor.reservation.service.service.ReservationService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,10 +18,17 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationMapper reservationMapper;
     private final ReservationRepository reservationRepository;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final String reservationEventTopicName;
 
-    public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository) {
+    public ReservationServiceImpl(ReservationMapper reservationMapper,
+                                  ReservationRepository reservationRepository,
+                                  KafkaTemplate<String, Object> kafkaTemplate,
+                               @Value("${reservation.event.topic.name}") String reservationEventTopicName) {
         this.reservationMapper = reservationMapper;
         this.reservationRepository = reservationRepository;
+        this.kafkaTemplate = kafkaTemplate;
+        this.reservationEventTopicName = reservationEventTopicName;
     }
 
     @Override
@@ -34,6 +43,8 @@ public class ReservationServiceImpl implements ReservationService {
                 savedReservation.getStartDate(),
                 savedReservation.getEndDate()
         );
+
+        kafkaTemplate.send(reservationEventTopicName, placeReservation);
 
         return reservationMapper.mapReservationToReservationResponse(savedReservation);
     }
