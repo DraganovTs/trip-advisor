@@ -35,7 +35,8 @@ spring:
         allow.auto.create.topics: false
 
 
-reservation:
-  event:
-    topic:
-      name: reservation-created-events-topic
+
+topics:
+  reservationEvent: reservation-created-events-topic
+  accommodationCommands: accommodation-commands
+

@@ -24,7 +24,7 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationServiceImpl(ReservationMapper reservationMapper,
                                   ReservationRepository reservationRepository,
                                   KafkaTemplate<String, Object> kafkaTemplate,
-                               @Value("${reservation.event.topic.name}") String reservationEventTopicName) {
+                               @Value("${topics.reservationEvent}") String reservationEventTopicName) {
         this.reservationMapper = reservationMapper;
         this.reservationRepository = reservationRepository;
         this.kafkaTemplate = kafkaTemplate;
