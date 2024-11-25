@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Table(name = "reservations")
@@ -34,7 +35,7 @@ public class Reservation {
     private String guestEmail;
 
     @Column(name = "accommodation_id", nullable = false)
-    private Long accommodationId;
+    private UUID accommodationId;
 
 
 

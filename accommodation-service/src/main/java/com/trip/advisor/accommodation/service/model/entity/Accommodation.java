@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "accommodations")
@@ -20,9 +21,9 @@ import java.util.List;
 @NoArgsConstructor
 public class Accommodation extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "accommodation_id")
-    private long accommodationId;
+    private UUID accommodationId;
     @Column(nullable = false,length = 20)
     @Size(min = 2, max = 20)
     private String name;

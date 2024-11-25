@@ -12,14 +12,14 @@ import org.springframework.kafka.core.ProducerFactory;
 @Configuration
 public class KafkaConfig {
 
+    @Value("${topics.reservationEvent}")
+    private String reservationTopicName;
+    @Value("${topics.accommodationCommands}")
+    private String reserveAccommodationCommandTopicName;
 
 
     private final static Integer TOPIC_REPLICATION_FACTOR = 3;
     private final static Integer TOPIC_PARTITIONS = 3;
-
-    @Value("${reservation.event.topic.name}")
-    private String reservationTopicName;
-
 
 
     @Bean
@@ -35,4 +35,14 @@ public class KafkaConfig {
                 .replicas(TOPIC_REPLICATION_FACTOR)
                 .build();
     }
+
+    @Bean
+    NewTopic createReserveAccommodationCommandTopic() {
+        return TopicBuilder
+                .name(reserveAccommodationCommandTopicName)
+                .partitions(TOPIC_PARTITIONS)
+                .replicas(TOPIC_REPLICATION_FACTOR)
+                .build();
+    }
+
 }

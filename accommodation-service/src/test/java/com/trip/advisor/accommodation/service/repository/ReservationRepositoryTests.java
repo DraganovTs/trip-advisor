@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @SpringBootTest
 @Transactional
@@ -95,7 +96,7 @@ public class ReservationRepositoryTests {
     @Test
     public void ReservationRepository_DeleteByAccommodationId_NoEffectIfNoneExists() {
 
-        reservationRepository.deleteReservationByAccommodationId(999L);
+        reservationRepository.deleteReservationByAccommodationId(UUID.randomUUID());
 
         List<Reservation> reservations = reservationRepository.findAll();
         Assertions.assertFalse(reservations.isEmpty());

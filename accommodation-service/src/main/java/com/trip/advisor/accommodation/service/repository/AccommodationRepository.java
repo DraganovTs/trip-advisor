@@ -7,12 +7,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface AccommodationRepository extends JpaRepository<Accommodation,Long> {
 
+    Optional<Accommodation>findById(UUID id);
     Optional<Accommodation>findByName(String name);
     Optional<Accommodation>findByNameAndAddress_CityAndAddress_Street(String name, String city, String address);
     Optional<List<Accommodation>>findByType(AccommodationType type);
+    void deleteAccommodationByAccommodationId(UUID accommodationId);
 
 }

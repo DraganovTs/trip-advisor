@@ -90,7 +90,7 @@ public class AccommodationRepositoryTests {
     @Test
     public void AccommodationRepository_Delete_ReturnEmptyResult() {
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
-        accommodationRepository.deleteById(savedAccommodation.getAccommodationId());
+        accommodationRepository.deleteAccommodationByAccommodationId(savedAccommodation.getAccommodationId());
         Accommodation deletedAccommodation = accommodationRepository.findById(savedAccommodation.getAccommodationId())
                 .orElse(null);
 

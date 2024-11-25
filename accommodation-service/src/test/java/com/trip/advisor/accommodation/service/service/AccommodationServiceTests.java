@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -190,13 +191,13 @@ public class AccommodationServiceTests {
     public void deleteAccommodation_Success() {
         when(accommodationRepository.findByNameAndAddress_CityAndAddress_Street(anyString(), anyString(), anyString()))
                 .thenReturn(Optional.of(accommodation));
-        doNothing().when(reservationService).deleteByAccommodationId(anyLong());
+        doNothing().when(reservationService).deleteByAccommodationId(any(UUID.class));
         doNothing().when(accommodationRepository).deleteById(anyLong());
 
         boolean result = accommodationService.deleteAccommodation("TestHotel", "Sofia", "Vitoshka");
 
         verify(accommodationRepository).deleteById(anyLong());
-        verify(reservationService).deleteByAccommodationId(anyLong());
+        verify(reservationService).deleteByAccommodationId(any(UUID.class));
         // Add more assertions if necessary
     }
 

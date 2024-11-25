@@ -8,8 +8,10 @@ import com.trip.advisor.accommodation.service.services.ReservationService;
 import com.trip.advisor.common.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -83,7 +85,7 @@ public class ReservationServiceImpl implements ReservationService {
      * @return List of reservation entities
      */
     @Override
-    public List<Reservation> initializeReservation(List<ReservationDTO> reservations, Long accommodationId) {
+    public List<Reservation> initializeReservation(List<ReservationDTO> reservations, UUID accommodationId) {
         if (reservations == null) {
             reservations = new ArrayList<>();
         }
@@ -91,7 +93,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> reservationList = new ArrayList<>();
         for (ReservationDTO reservationDTO : reservations) {
             Reservation currentReservation = AccommodationMapper.mapReservationDTOToReservation(reservationDTO);
-            currentReservation.setAccommodationId(accommodationId); // Set the accommodation ID
+            currentReservation.setAccommodationId(accommodationId);
             reservationList.add(currentReservation);
         }
 
@@ -102,7 +104,12 @@ public class ReservationServiceImpl implements ReservationService {
      * @param accommodationId ID of the associated accommodation
      */
     @Override
-    public void deleteByAccommodationId(long accommodationId) {
+    public void deleteByAccommodationId(UUID accommodationId) {
         reservationRepository.deleteReservationByAccommodationId(accommodationId);
+    }
+
+    @Override
+    public boolean checkIfIsAlreadyReserved(LocalDate startDate, LocalDate endDate, UUID accommodationId) {
+        return reservationRepository.findOverlappingReservation(startDate,endDate,accommodationId).isPresent();
     }
 }

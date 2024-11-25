@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -163,7 +164,7 @@ public class ReservationServiceTests {
     void initializeReservation_Success() {
         try (var mockedStatic = Mockito.mockStatic(AccommodationMapper.class)) {
             // Arrange
-            Long accommodationId = 1L;
+            UUID accommodationId = UUID.randomUUID();
             ReservationDTO reservationDTO = new ReservationDTO();
             Reservation reservation = new Reservation();
             List<ReservationDTO> reservationDTOs = List.of(reservationDTO);
@@ -184,7 +185,7 @@ public class ReservationServiceTests {
     @Test
     void deleteByAccommodationId_Success() {
         // Arrange
-        long accommodationId = 1L;
+        UUID accommodationId = UUID.randomUUID();
 
         // Act
         reservationService.deleteByAccommodationId(accommodationId);

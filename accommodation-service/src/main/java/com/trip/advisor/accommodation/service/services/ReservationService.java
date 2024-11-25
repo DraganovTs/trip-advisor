@@ -3,7 +3,9 @@ package com.trip.advisor.accommodation.service.services;
 import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public interface ReservationService {
 
@@ -39,11 +41,13 @@ public interface ReservationService {
      * @param reservations list of initial reservations
      * @return List of reservationDTOs
      */
-    List<Reservation> initializeReservation(List<ReservationDTO> reservations,Long accommodationId);
+    List<Reservation> initializeReservation(List<ReservationDTO> reservations,UUID accommodationId);
 
     /**
      *
      * @param accommodationId
      */
-    void deleteByAccommodationId(long accommodationId);
+    void deleteByAccommodationId(UUID accommodationId);
+
+    boolean checkIfIsAlreadyReserved(LocalDate startDate, LocalDate endDate, UUID accommodationId);
 }
