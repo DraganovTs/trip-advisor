@@ -61,7 +61,7 @@ public class AccommodationRepositoryTests {
     @Test
     public void AccommodationRepository_FindById_ReturnAccommodation() {
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
-        Accommodation foundAccommodation = accommodationRepository.findById(savedAccommodation.getAccommodationId()).orElse(null);
+        Accommodation foundAccommodation = accommodationRepository.findByAccommodationId(savedAccommodation.getAccommodationId()).orElse(null);
 
         Assertions.assertNotNull(foundAccommodation);
         Assertions.assertEquals(savedAccommodation.getAccommodationId(), foundAccommodation.getAccommodationId());
@@ -91,7 +91,7 @@ public class AccommodationRepositoryTests {
     public void AccommodationRepository_Delete_ReturnEmptyResult() {
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
         accommodationRepository.deleteAccommodationByAccommodationId(savedAccommodation.getAccommodationId());
-        Accommodation deletedAccommodation = accommodationRepository.findById(savedAccommodation.getAccommodationId())
+        Accommodation deletedAccommodation = accommodationRepository.findByAccommodationId(savedAccommodation.getAccommodationId())
                 .orElse(null);
 
         Assertions.assertNull(deletedAccommodation);

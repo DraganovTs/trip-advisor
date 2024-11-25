@@ -39,6 +39,7 @@ spring:
 
 topics:
   accommodationCommands: accommodation-commands
+  accommodationEvents: accommodation-events
 #  rabbitmq:
 #    host: "localhost"
 #    port: 5672
