@@ -3,6 +3,7 @@ package com.trip.advisor.accommodation.service.services.handler;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
 import com.trip.advisor.accommodation.service.services.ReservationService;
 import com.trip.advisor.common.commands.ReserveAccommodationCommand;
+import com.trip.advisor.common.events.AccommodationReservationFailedEvent;
 import com.trip.advisor.common.events.AccommodationReservedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,14 @@ public class AccommodationCommandsHandler {
             kafkaTemplate.send(accommodationEventsTopicName, accommodationReservedEvent);
             //TODO get correct price maybe and name
         } catch (Exception e) {
-            logger.error(e.getLocalizedMessage(),e);
+            logger.error(e.getLocalizedMessage(), e);
+            AccommodationReservationFailedEvent accommodationReservationFailedEvent = new AccommodationReservationFailedEvent(
+                    command.getReservationId(),
+                    command.getAccommodationId(),
+                    command.getStartDate(),
+                    command.getEndDate()
+            );
+            kafkaTemplate.send(accommodationEventsTopicName,accommodationReservationFailedEvent);
         }
 
 
