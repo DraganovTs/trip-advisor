@@ -41,7 +41,9 @@ public class ReservationServiceImpl implements ReservationService {
                 savedReservation.getUserId(),
                 savedReservation.getAccommodationId(),
                 savedReservation.getStartDate(),
-                savedReservation.getEndDate()
+                savedReservation.getEndDate(),
+                savedReservation.getGuestName(),
+                savedReservation.getGuestEmail()
         );
 
         kafkaTemplate.send(reservationEventTopicName, placeReservation);

@@ -1,8 +1,9 @@
 package com.trip.advisor.reservation.service.model.dto;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -23,4 +24,11 @@ public class CreateReservationRequestDTO {
 
     @FutureOrPresent(message = "End date must be today or a future date.")
     private LocalDate endDate;
+    @NotNull
+    @Length(max = 20, message = "name must be max 20 chars")
+    private String userName;
+    @NotNull
+    @Email(message = "email must be valid")
+    private String userEmail;
+
 }

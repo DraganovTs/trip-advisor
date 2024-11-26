@@ -1,5 +1,8 @@
 package com.trip.advisor.accommodation.service.services.handler;
 
+import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
+import com.trip.advisor.accommodation.service.model.entity.Accommodation;
+import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
 import com.trip.advisor.accommodation.service.services.ReservationService;
 import com.trip.advisor.common.commands.ReserveAccommodationCommand;
@@ -13,6 +16,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 
 @Component
 @KafkaListener(topics = "${topics.accommodationCommands}")
@@ -36,17 +42,20 @@ public class AccommodationCommandsHandler {
     @KafkaHandler
     private void handleCommand(@Payload ReserveAccommodationCommand command) throws ReflectiveOperationException {
         try {
-            boolean isReserved = reservationService.checkIfIsAlreadyReserved(
+            reservationService.checkIfIsAlreadyReserved(
                     command.getStartDate(),
                     command.getEndDate(),
                     command.getAccommodationId());
-            //TODO create a reservation assign to accommodation
+            Reservation savedReservation = reservationService.createReservationFromCommand(command);
+            Accommodation accommodation = accommodationService.getAccommodationById(command.getAccommodationId());
+            accommodation.addReservation(savedReservation);
+            BigDecimal price = BigDecimal.valueOf(accommodation.getPrice() * ChronoUnit.DAYS.between(command.getStartDate(), command.getEndDate()));
             AccommodationReservedEvent accommodationReservedEvent = new AccommodationReservedEvent(
                     command.getAccommodationId(),
-                    100
+                    price
             );
             kafkaTemplate.send(accommodationEventsTopicName, accommodationReservedEvent);
-            //TODO get correct price maybe and name
+
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage(), e);
             AccommodationReservationFailedEvent accommodationReservationFailedEvent = new AccommodationReservationFailedEvent(
@@ -55,7 +64,7 @@ public class AccommodationCommandsHandler {
                     command.getStartDate(),
                     command.getEndDate()
             );
-            kafkaTemplate.send(accommodationEventsTopicName,accommodationReservationFailedEvent);
+            kafkaTemplate.send(accommodationEventsTopicName, accommodationReservationFailedEvent);
         }
 
 

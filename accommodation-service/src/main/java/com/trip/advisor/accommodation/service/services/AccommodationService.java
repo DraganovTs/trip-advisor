@@ -1,10 +1,12 @@
 package com.trip.advisor.accommodation.service.services;
 
 import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
+import com.trip.advisor.accommodation.service.model.entity.Accommodation;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface AccommodationService {
 
@@ -51,4 +53,6 @@ public interface AccommodationService {
     @Transactional
     @Modifying
     boolean deleteAccommodation(String name,String city, String street);
+
+    Accommodation getAccommodationById(UUID accommodationId);
 }

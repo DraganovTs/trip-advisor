@@ -1,10 +1,12 @@
 package com.trip.advisor.accommodation.service.services.impl;
 
+import com.trip.advisor.accommodation.service.exception.ReservationOverlapping;
 import com.trip.advisor.accommodation.service.mapper.AccommodationMapper;
 import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.repository.ReservationRepository;
 import com.trip.advisor.accommodation.service.services.ReservationService;
+import com.trip.advisor.common.commands.ReserveAccommodationCommand;
 import com.trip.advisor.common.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -109,7 +111,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean checkIfIsAlreadyReserved(LocalDate startDate, LocalDate endDate, UUID accommodationId) {
-        return reservationRepository.findOverlappingReservation(startDate,endDate,accommodationId).isPresent();
+    public void checkIfIsAlreadyReserved(LocalDate startDate, LocalDate endDate, UUID accommodationId) {
+        boolean present = reservationRepository.findOverlappingReservation(startDate, endDate, accommodationId).isPresent();
+        if (present) throw new ReservationOverlapping("Accommodation already reserved for this dates");
+    }
+
+    @Override
+    public Reservation createReservationFromCommand(ReserveAccommodationCommand command) {
+        Reservation reservationToSave = AccommodationMapper.mapReserveAccommodationCommandToReservation(command);
+        return reservationRepository.save(reservationToSave);
     }
 }

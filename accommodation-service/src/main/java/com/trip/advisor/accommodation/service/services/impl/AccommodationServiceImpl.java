@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -140,6 +141,13 @@ public class AccommodationServiceImpl implements AccommodationService {
         accommodationRepository.deleteAccommodationByAccommodationId(accommodation.getAccommodationId());
 
         return true;
+    }
+
+    @Override
+    public Accommodation getAccommodationById(UUID accommodationId) {
+        return accommodationRepository.findByAccommodationId(accommodationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Accommodation", "accommodationId",
+                        accommodationId.toString()));
     }
 
 

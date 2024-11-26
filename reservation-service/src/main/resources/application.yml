@@ -39,4 +39,4 @@ spring:
 topics:
   reservationEvent: reservation-created-events-topic
   accommodationCommands: accommodation-commands
-
+  accommodationEvents: accommodation-events

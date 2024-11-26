@@ -2,6 +2,7 @@ package com.trip.advisor.accommodation.service.services;
 
 import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
+import com.trip.advisor.common.commands.ReserveAccommodationCommand;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -49,5 +50,7 @@ public interface ReservationService {
      */
     void deleteByAccommodationId(UUID accommodationId);
 
-    boolean checkIfIsAlreadyReserved(LocalDate startDate, LocalDate endDate, UUID accommodationId);
+    void checkIfIsAlreadyReserved(LocalDate startDate, LocalDate endDate, UUID accommodationId);
+
+    Reservation createReservationFromCommand(ReserveAccommodationCommand command);
 }

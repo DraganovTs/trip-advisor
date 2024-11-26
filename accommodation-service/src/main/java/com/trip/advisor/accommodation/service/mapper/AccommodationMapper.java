@@ -7,6 +7,7 @@ import com.trip.advisor.accommodation.service.model.entity.Accommodation;
 import com.trip.advisor.accommodation.service.model.entity.Address;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.model.enums.AccommodationType;
+import com.trip.advisor.common.commands.ReserveAccommodationCommand;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class AccommodationMapper {
                 .reservations(new ArrayList<>())
                 .build();
     }
+
     public static AccommodationDTO mapAccommodationToAccommodationDTO(Accommodation accommodation) {
         return AccommodationDTO.builder()
                 .name(accommodation.getName())
@@ -39,7 +41,6 @@ public class AccommodationMapper {
                 .reservations(mapReservationsToReservationDTOs(accommodation.getReservations())) // Use the list mapping method
                 .build();
     }
-
 
 
     public static ReservationDTO mapReservationToReservationDTO(Reservation reservation) {
@@ -59,6 +60,7 @@ public class AccommodationMapper {
                 .guestEmail(reservationDTO.getGuestEmail())
                 .build();
     }
+
     public static List<ReservationDTO> mapReservationsToReservationDTOs(List<Reservation> reservations) {
         List<ReservationDTO> reservationDTOs = new ArrayList<>();
         for (Reservation reservation : reservations) {
@@ -87,4 +89,13 @@ public class AccommodationMapper {
     }
 
 
+    public static Reservation mapReserveAccommodationCommandToReservation(ReserveAccommodationCommand command) {
+        return Reservation.builder()
+                .startDate(command.getStartDate())
+                .endDate(command.getEndDate())
+                .guestName(command.getUserName())
+                .guestEmail(command.getUserEmail())
+                .accommodationId(command.getAccommodationId())
+                .build();
+    }
 }

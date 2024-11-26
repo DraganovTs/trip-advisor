@@ -1,4 +1,4 @@
-package com.trip.advisor.common.events;
+package com.trip.advisor.common.commands;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccommodationReservedEvent {
+public class ProcessPaymentCommand {
+    private UUID reservationId;
     private UUID accommodationId;
-    private BigDecimal price;
+    private BigDecimal reservationPrice;
 }

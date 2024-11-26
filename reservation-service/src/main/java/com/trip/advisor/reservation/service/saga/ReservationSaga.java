@@ -1,6 +1,7 @@
 package com.trip.advisor.reservation.service.saga;
 
 import com.trip.advisor.common.commands.ReserveAccommodationCommand;
+import com.trip.advisor.common.events.AccommodationReservedEvent;
 import com.trip.advisor.common.events.ReservationCreatedEvent;
 import com.trip.advisor.reservation.service.model.enums.ReservationStatus;
 import com.trip.advisor.reservation.service.service.ReservationHistoryService;
@@ -12,7 +13,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-@KafkaListener(topics = "${topics.reservationEvent}")
+@KafkaListener(topics = {"${topics.reservationEvent}",
+        "${topics.accommodationEvents}"})
 public class ReservationSaga {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -20,7 +22,8 @@ public class ReservationSaga {
     private final ReservationHistoryService reservationHistoryService;
 
     public ReservationSaga(KafkaTemplate<String, Object> kafkaTemplate,
-                           @Value("${topics.accommodationCommands}") String accommodationCommandTopicName, ReservationHistoryService reservationHistoryService) {
+                           @Value("${topics.accommodationCommands}") String accommodationCommandTopicName,
+                           ReservationHistoryService reservationHistoryService) {
         this.kafkaTemplate = kafkaTemplate;
         this.accommodationCommandTopicName = accommodationCommandTopicName;
         this.reservationHistoryService = reservationHistoryService;
@@ -32,11 +35,19 @@ public class ReservationSaga {
                 event.getAccommodationId(),
                 event.getStartDate(),
                 event.getEndDate(),
-                event.getReservationId()
+                event.getReservationId(),
+                event.getUserName(),
+                event.getUserEmail()
         );
 
         kafkaTemplate.send(accommodationCommandTopicName, command);
 
         reservationHistoryService.add(event.getReservationId(), ReservationStatus.CREATED);
     }
+
+    @KafkaHandler
+    public void handleEvent(@Payload AccommodationReservedEvent event){
+
+    }
+
 }

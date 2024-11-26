@@ -16,4 +16,6 @@ public class ReservationCreatedEvent {
     private UUID accommodationId;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String userName;
+    private String userEmail;
 }

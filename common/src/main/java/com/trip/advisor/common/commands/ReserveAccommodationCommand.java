@@ -15,4 +15,6 @@ public class ReserveAccommodationCommand {
     private LocalDate startDate;
     private LocalDate endDate;
     private UUID reservationId;
+    private String userName;
+    private String userEmail;
 }

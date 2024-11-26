@@ -28,4 +28,9 @@ public class Reservation {
     private LocalDate endDate;
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
+    @Column(name = "guest_name", nullable = false, length = 20)
+    private String guestName;
+
+    @Column(name = "guest_email", nullable = false)
+    private String guestEmail;
 }

@@ -34,7 +34,7 @@ public class Reservation {
     @Column(name = "guest_email", nullable = false)
     private String guestEmail;
 
-    @Column(name = "accommodation_id", nullable = false)
+    @Column(name = "accommodation_id", nullable = false, columnDefinition = "TEXT")
     private UUID accommodationId;
 
 
