@@ -16,6 +16,8 @@ public class ReservationMapper {
                 .startDate(reservationRequestDTO.getStartDate())
                 .endDate(reservationRequestDTO.getEndDate())
                 .reservationStatus(ReservationStatus.CREATED)
+                .guestName(reservationRequestDTO.getUserName())
+                .guestEmail(reservationRequestDTO.getUserEmail())
                 .build();
     }
 

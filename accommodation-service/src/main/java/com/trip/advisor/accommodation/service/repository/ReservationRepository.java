@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +19,10 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
             "((:startDate BETWEEN r.startDate AND r.endDate) OR " +
             "(:endDate BETWEEN r.startDate AND r.endDate) OR " +
             "(r.startDate BETWEEN :startDate AND :endDate))")
-    Optional<Reservation> findOverlappingReservation(@Param("startDate") LocalDate startDate,
-                                                     @Param("endDate") LocalDate endDate,
-                                                     @Param("accommodationId") UUID accommodationId);
+    List<Reservation> findOverlappingReservations(@Param("startDate") LocalDate startDate,
+                                                  @Param("endDate") LocalDate endDate,
+                                                  @Param("accommodationId") UUID accommodationId);
+
+
+    Optional<Reservation> findById(Long id);
 }

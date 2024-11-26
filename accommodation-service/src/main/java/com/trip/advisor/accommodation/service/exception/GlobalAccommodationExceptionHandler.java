@@ -26,6 +26,18 @@ public class GlobalAccommodationExceptionHandler extends GlobalExceptionHandler 
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ReservationOverlapping.class)
+    public ResponseEntity<ErrorResponseDTO> handleReservationOverlapping(ReservationOverlapping ex, WebRequest webRequest) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                webRequest.getDescription(false),
+                HttpStatus.CONFLICT,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
+    }
+
+
 
 
 }

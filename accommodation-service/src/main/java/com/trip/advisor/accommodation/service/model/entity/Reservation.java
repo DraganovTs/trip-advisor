@@ -7,7 +7,9 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "reservations")
+@Table(name = "reservations", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"accommodation_id", "start_date", "end_date"})
+})
 @Getter
 @Setter
 @ToString
@@ -31,7 +33,7 @@ public class Reservation {
     @Column(name = "guest_email", nullable = false)
     private String guestEmail;
 
-    @Column(name = "accommodation_id", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "accommodation_id", nullable = false, length = 36)
     private UUID accommodationId;
 
 

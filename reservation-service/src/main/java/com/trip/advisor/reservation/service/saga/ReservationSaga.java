@@ -51,6 +51,7 @@ public class ReservationSaga {
 
     @KafkaHandler
     public void handleEvent(@Payload AccommodationReservedEvent event) {
+        System.out.println("Perfect");
         ProcessPaymentCommand command = new ProcessPaymentCommand(
                 event.getReservationId(),
                 event.getAccommodationId(),

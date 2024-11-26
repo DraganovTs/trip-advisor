@@ -112,8 +112,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void checkIfIsAlreadyReserved(LocalDate startDate, LocalDate endDate, UUID accommodationId) {
-        boolean present = reservationRepository.findOverlappingReservation(startDate, endDate, accommodationId).isPresent();
-        if (present) throw new ReservationOverlapping("Accommodation already reserved for this dates");
+        List<Reservation> overlappingReservations = reservationRepository.findOverlappingReservations(startDate, endDate, accommodationId);
+
+        if (!overlappingReservations.isEmpty()) {
+            throw new ReservationOverlapping("Accommodation already reserved for the specified dates");
+        }
     }
 
     @Override
