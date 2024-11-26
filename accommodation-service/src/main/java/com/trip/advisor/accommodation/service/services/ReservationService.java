@@ -46,7 +46,7 @@ public interface ReservationService {
 
     /**
      *
-     * @param accommodationId
+     * @param accommodationId UUID
      */
     void deleteByAccommodationId(UUID accommodationId);
 

@@ -1,6 +1,5 @@
 package com.trip.advisor.reservation.service.model.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;

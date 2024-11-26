@@ -12,7 +12,7 @@ import com.trip.advisor.accommodation.service.services.AccommodationService;
 import com.trip.advisor.accommodation.service.services.ReservationService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -123,9 +123,9 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     /**
-     * @param name
-     * @param city
-     * @param street
+     * @param name accommodation name
+     * @param city accommodation city
+     * @param street accommodation street
      * @return boolean indicating if deletion was successful
      */
     @Override

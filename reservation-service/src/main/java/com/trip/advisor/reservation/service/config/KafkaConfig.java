@@ -16,6 +16,8 @@ public class KafkaConfig {
     private String reservationTopicName;
     @Value("${topics.accommodationCommands}")
     private String reserveAccommodationCommandTopicName;
+    @Value("${topics.paymentCommands}")
+    private String paymentCommandTopicName;
 
 
     private final static Integer TOPIC_REPLICATION_FACTOR = 3;
@@ -40,6 +42,15 @@ public class KafkaConfig {
     NewTopic createReserveAccommodationCommandTopic() {
         return TopicBuilder
                 .name(reserveAccommodationCommandTopicName)
+                .partitions(TOPIC_PARTITIONS)
+                .replicas(TOPIC_REPLICATION_FACTOR)
+                .build();
+    }
+
+    @Bean
+    NewTopic createPaymentCommandsTopic() {
+        return TopicBuilder
+                .name(paymentCommandTopicName)
                 .partitions(TOPIC_PARTITIONS)
                 .replicas(TOPIC_REPLICATION_FACTOR)
                 .build();

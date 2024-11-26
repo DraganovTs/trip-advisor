@@ -1,6 +1,5 @@
 package com.trip.advisor.accommodation.service.services.handler;
 
-import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Accommodation;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
@@ -40,7 +39,7 @@ public class AccommodationCommandsHandler {
     }
 
     @KafkaHandler
-    private void handleCommand(@Payload ReserveAccommodationCommand command) throws ReflectiveOperationException {
+    private void handleCommand(@Payload ReserveAccommodationCommand command)  {
         try {
             reservationService.checkIfIsAlreadyReserved(
                     command.getStartDate(),
@@ -51,6 +50,7 @@ public class AccommodationCommandsHandler {
             accommodation.addReservation(savedReservation);
             BigDecimal price = BigDecimal.valueOf(accommodation.getPrice() * ChronoUnit.DAYS.between(command.getStartDate(), command.getEndDate()));
             AccommodationReservedEvent accommodationReservedEvent = new AccommodationReservedEvent(
+                    command.getReservationId(),
                     command.getAccommodationId(),
                     price
             );

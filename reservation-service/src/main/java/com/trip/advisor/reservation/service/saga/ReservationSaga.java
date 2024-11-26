@@ -1,5 +1,6 @@
 package com.trip.advisor.reservation.service.saga;
 
+import com.trip.advisor.common.commands.ProcessPaymentCommand;
 import com.trip.advisor.common.commands.ReserveAccommodationCommand;
 import com.trip.advisor.common.events.AccommodationReservedEvent;
 import com.trip.advisor.common.events.ReservationCreatedEvent;
@@ -18,15 +19,18 @@ import org.springframework.stereotype.Component;
 public class ReservationSaga {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final String accommodationCommandTopicName;
     private final ReservationHistoryService reservationHistoryService;
+    private final String accommodationCommandTopicName;
+    private final String paymentsCommandTopicName;
 
     public ReservationSaga(KafkaTemplate<String, Object> kafkaTemplate,
+                           ReservationHistoryService reservationHistoryService,
                            @Value("${topics.accommodationCommands}") String accommodationCommandTopicName,
-                           ReservationHistoryService reservationHistoryService) {
+                           @Value("${topics.paymentCommands}") String paymentsCommandTopicName) {
         this.kafkaTemplate = kafkaTemplate;
         this.accommodationCommandTopicName = accommodationCommandTopicName;
         this.reservationHistoryService = reservationHistoryService;
+        this.paymentsCommandTopicName = paymentsCommandTopicName;
     }
 
     @KafkaHandler
@@ -46,8 +50,15 @@ public class ReservationSaga {
     }
 
     @KafkaHandler
-    public void handleEvent(@Payload AccommodationReservedEvent event){
+    public void handleEvent(@Payload AccommodationReservedEvent event) {
+        ProcessPaymentCommand command = new ProcessPaymentCommand(
+                event.getReservationId(),
+                event.getAccommodationId(),
+                event.getPrice()
+        );
 
+        kafkaTemplate.send(paymentsCommandTopicName, command);
     }
+
 
 }

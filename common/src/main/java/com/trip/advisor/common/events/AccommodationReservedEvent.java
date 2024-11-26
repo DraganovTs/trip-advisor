@@ -11,6 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccommodationReservedEvent {
+    private UUID reservationId;
     private UUID accommodationId;
     private BigDecimal price;
 }
