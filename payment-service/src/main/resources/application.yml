@@ -1,3 +1,5 @@
 server:
   port: 8083
 
+stripe:
+  secretKey: sk_test_51QPpkMCAxyEgI7po5W9lUlEhhYYjqt9rpVUPdvD0x97NGTcLwU7sWchfbDWnLdK6RmhuClYmnSivPjLZ5wDRe81300RwVvtXnz
