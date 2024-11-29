@@ -27,6 +27,7 @@ public class PaymentMapper {
 
     public Payment mapPaymentDTOToPayment(PaymentDTO paymentDTO) {
         return Payment.builder()
+                .id(paymentDTO.getId())
                 .accommodationId(paymentDTO.getAccommodationId())
                 .reservationId(paymentDTO.getReservationId())
                 .price(paymentDTO.getPrice())
