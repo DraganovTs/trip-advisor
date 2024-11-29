@@ -24,5 +24,8 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
                                                   @Param("accommodationId") UUID accommodationId);
 
 
+    Reservation findByAccommodationIdAndStartDateAndEndDate(UUID accommodationId, LocalDate startDate, LocalDate endDate);
+
+
     Optional<Reservation> findById(Long id);
 }

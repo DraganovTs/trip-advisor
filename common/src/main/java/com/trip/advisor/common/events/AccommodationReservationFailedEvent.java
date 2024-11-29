@@ -14,5 +14,7 @@ public class AccommodationReservationFailedEvent {
     private UUID accommodationId;
     private LocalDate startDate;
     private LocalDate endDate;
+    private UUID userId;
+
 
 }

@@ -40,4 +40,5 @@ topics:
   reservationEvent: reservation-created-events-topic
   accommodationCommands: accommodation-commands
   accommodationEvents: accommodation-events
-  paymentCommands: paymentsCommand
+  paymentCommands: payments-command
+  messageCommand: message-command

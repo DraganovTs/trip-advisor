@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ReserveAccommodationCommand {
     private UUID accommodationId;
+    private UUID userId;
     private LocalDate startDate;
     private LocalDate endDate;
     private UUID reservationId;

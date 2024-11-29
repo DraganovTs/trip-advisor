@@ -53,4 +53,6 @@ public interface ReservationService {
     void checkIfIsAlreadyReserved(LocalDate startDate, LocalDate endDate, UUID accommodationId);
 
     Reservation createReservationFromCommand(ReserveAccommodationCommand command);
+
+    Reservation findReservationByAccIdStartAndEndDate(UUID accommodationId, LocalDate startDate, LocalDate endDate);
 }

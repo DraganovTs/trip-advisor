@@ -3,8 +3,10 @@ package com.trip.advisor.common.commands;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -13,6 +15,11 @@ import java.util.UUID;
 public class ProcessPaymentCommand {
     private UUID reservationId;
     private UUID accommodationId;
+    private UUID userId;
     private BigDecimal reservationPrice;
     private String accommodationName;
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+
 }

@@ -57,7 +57,10 @@ public class PaymentCommandsHandler {
             PaymentFailedEvent paymentFailedEvent = new PaymentFailedEvent(
                     command.getReservationId(),
                     command.getAccommodationId(),
-                    command.getAccommodationName()
+                    command.getUserId(),
+                    command.getAccommodationName(),
+                    command.getStartDate(),
+                    command.getEndDate()
             );
 
             kafkaTemplate.send(paymentsEventTopicName, paymentFailedEvent);

@@ -124,4 +124,9 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservationToSave = AccommodationMapper.mapReserveAccommodationCommandToReservation(command);
         return reservationRepository.save(reservationToSave);
     }
+
+    @Override
+    public Reservation findReservationByAccIdStartAndEndDate(UUID accommodationId, LocalDate startDate, LocalDate endDate) {
+        return reservationRepository.findByAccommodationIdAndStartDateAndEndDate(accommodationId, startDate, endDate);
+    }
 }

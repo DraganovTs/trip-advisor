@@ -1,24 +1,19 @@
-package com.trip.advisor.common.events;
+package com.trip.advisor.common.commands;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccommodationReservedEvent {
-    private UUID reservationId;
-    private UUID userId;
+public class CancelAccommodationReservationCommand {
     private UUID accommodationId;
-    private BigDecimal price;
-    private String accommodationName;
+    private UUID reservationId;
     private LocalDate startDate;
     private LocalDate endDate;
-
 
 }

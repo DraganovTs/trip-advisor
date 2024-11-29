@@ -5,6 +5,7 @@ import com.trip.advisor.accommodation.service.model.entity.Accommodation;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.services.AccommodationService;
 import com.trip.advisor.accommodation.service.services.ReservationService;
+import com.trip.advisor.common.commands.CancelAccommodationReservationCommand;
 import com.trip.advisor.common.commands.ReserveAccommodationCommand;
 import com.trip.advisor.common.events.AccommodationReservationFailedEvent;
 import com.trip.advisor.common.events.AccommodationReservedEvent;
@@ -68,6 +69,20 @@ public class AccommodationCommandsHandler {
 
     }
 
+    @KafkaHandler
+    @Transactional
+    public void handleCommand(@Payload CancelAccommodationReservationCommand command) {
+
+        Reservation reservation = reservationService.findReservationByAccIdStartAndEndDate(
+                command.getAccommodationId(),
+                command.getStartDate(),
+                command.getEndDate()
+        );
+        Accommodation accommodation = accommodationService.getAccommodationById(command.getAccommodationId());
+        accommodation.removeReservation(reservation);
+        reservationService.deleteReservation(reservation.getId());
+    }
+
     private BigDecimal calculatePrice(double dailyRate, LocalDate startDate, LocalDate endDate) {
         long days = ChronoUnit.DAYS.between(startDate, endDate);
         return BigDecimal.valueOf(dailyRate * days);
@@ -76,9 +91,12 @@ public class AccommodationCommandsHandler {
     private void publishAccommodationReservedEvent(ReserveAccommodationCommand command, BigDecimal price, String accommodationName) {
         AccommodationReservedEvent event = new AccommodationReservedEvent(
                 command.getReservationId(),
+                command.getUserId(),
                 command.getAccommodationId(),
                 price,
-                accommodationName
+                accommodationName,
+                command.getStartDate(),
+                command.getEndDate()
         );
         kafkaTemplate.send(accommodationEventsTopicName, event);
     }
@@ -89,7 +107,8 @@ public class AccommodationCommandsHandler {
                 command.getReservationId(),
                 command.getAccommodationId(),
                 command.getStartDate(),
-                command.getEndDate()
+                command.getEndDate(),
+                command.getUserId()
         );
         kafkaTemplate.send(accommodationEventsTopicName, failedEvent);
     }

@@ -14,7 +14,6 @@ spring:
   config:
     import: "optional:configserver:http://localhost:8071/"
 
-    #only if need automated reload on config files from git
   kafka:
     admin:
       auto-create: false
