@@ -1,12 +1,11 @@
-package com.trip.advisor.payment.service.service;
+package com.trip.advisor.stripe.service.service;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.trip.advisor.common.model.dto.StripePaymentRequest;
-import com.trip.advisor.payment.service.model.dto.StripeResponse;
-import org.springframework.beans.factory.annotation.Value;
+import com.trip.advisor.stripe.service.model.StripeResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,8 +14,9 @@ public class StripeService {
     //stripe API
     //-> productName,amount,quantity, currency
     //-> return sessionId and url
-    @Value("${stripe.secretKey}")
-    private String secret;
+
+
+    private final String secret = System.getenv("STRIPE_SECRET");
 
     public StripeResponse checkoutPayment(StripePaymentRequest request) throws StripeException {
         Stripe.apiKey = secret;

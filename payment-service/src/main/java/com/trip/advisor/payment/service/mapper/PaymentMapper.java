@@ -24,4 +24,12 @@ public class PaymentMapper {
                 .quantity(1L)
                 .build();
     }
+
+    public Payment mapPaymentDTOToPayment(PaymentDTO paymentDTO) {
+        return Payment.builder()
+                .accommodationId(paymentDTO.getAccommodationId())
+                .reservationId(paymentDTO.getReservationId())
+                .price(paymentDTO.getPrice())
+                .build();
+    }
 }

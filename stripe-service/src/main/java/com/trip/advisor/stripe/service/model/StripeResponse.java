@@ -1,4 +1,4 @@
-package com.trip.advisor.payment.service.model.dto;
+package com.trip.advisor.stripe.service.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

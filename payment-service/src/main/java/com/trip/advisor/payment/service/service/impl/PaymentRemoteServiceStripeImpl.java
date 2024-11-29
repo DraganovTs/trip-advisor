@@ -1,7 +1,7 @@
 package com.trip.advisor.payment.service.service.impl;
 
-import com.stripe.exception.StripeException;
 import com.trip.advisor.common.model.dto.StripePaymentRequest;
+import com.trip.advisor.payment.service.exception.PaymentTrueRemoteServiceNotCompleted;
 import com.trip.advisor.payment.service.mapper.PaymentMapper;
 import com.trip.advisor.payment.service.model.dto.PaymentDTO;
 import com.trip.advisor.payment.service.service.PaymentRemoteServiceStripe;
@@ -34,6 +34,7 @@ public class PaymentRemoteServiceStripeImpl implements PaymentRemoteServiceStrip
                     stripePaymentRequest, StripePaymentRequest.class);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            throw new PaymentTrueRemoteServiceNotCompleted(e.getMessage());
         }
     }
 }

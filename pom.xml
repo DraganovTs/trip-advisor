@@ -26,6 +26,7 @@
         <module>orchestrator-service</module>
         <module>reservation-service</module>
         <module>payment-service</module>
+        <module>stripe-service</module>
     </modules>
 
     <properties>
