@@ -43,7 +43,7 @@ public class AccommodationCommandsHandler {
 
     @KafkaHandler
     @Transactional
-    public void handleCommand(@Payload ReserveAccommodationCommand command)  {
+    public void handleCommand(@Payload ReserveAccommodationCommand command) {
         try {
             reservationService.checkIfIsAlreadyReserved(
                     command.getStartDate(),
@@ -57,7 +57,7 @@ public class AccommodationCommandsHandler {
 
             BigDecimal price = calculatePrice(accommodation.getPrice(), command.getStartDate(), command.getEndDate());
 
-            publishAccommodationReservedEvent(command, price);
+            publishAccommodationReservedEvent(command, price, accommodation.getName());
 
         } catch (ReservationOverlapping e) {
             handleReservationFailure(command, "Accommodation already reserved for the specified dates.");
@@ -73,12 +73,12 @@ public class AccommodationCommandsHandler {
         return BigDecimal.valueOf(dailyRate * days);
     }
 
-    private void publishAccommodationReservedEvent(ReserveAccommodationCommand command, BigDecimal price) {
+    private void publishAccommodationReservedEvent(ReserveAccommodationCommand command, BigDecimal price, String accommodationName) {
         AccommodationReservedEvent event = new AccommodationReservedEvent(
                 command.getReservationId(),
                 command.getAccommodationId(),
                 price,
-                command.getAccommodationName()
+                accommodationName
         );
         kafkaTemplate.send(accommodationEventsTopicName, event);
     }
@@ -89,8 +89,7 @@ public class AccommodationCommandsHandler {
                 command.getReservationId(),
                 command.getAccommodationId(),
                 command.getStartDate(),
-                command.getEndDate(),
-                command.getAccommodationName()
+                command.getEndDate()
         );
         kafkaTemplate.send(accommodationEventsTopicName, failedEvent);
     }

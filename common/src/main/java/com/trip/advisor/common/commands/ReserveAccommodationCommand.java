@@ -17,5 +17,5 @@ public class ReserveAccommodationCommand {
     private UUID reservationId;
     private String userName;
     private String userEmail;
-    private String accommodationName;
+
 }
