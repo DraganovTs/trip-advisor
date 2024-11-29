@@ -27,6 +27,7 @@
         <module>reservation-service</module>
         <module>payment-service</module>
         <module>stripe-service</module>
+        <module>messages-service</module>
     </modules>
 
     <properties>

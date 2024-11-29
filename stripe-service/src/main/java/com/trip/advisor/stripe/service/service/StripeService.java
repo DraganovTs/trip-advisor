@@ -18,7 +18,7 @@ public class StripeService {
 
     private final String secret = System.getenv("STRIPE_SECRET");
 
-    public StripeResponse checkoutPayment(StripePaymentRequest request) throws StripeException {
+    public StripeResponse checkoutPayment(StripePaymentRequest request)  {
         Stripe.apiKey = secret;
 
         SessionCreateParams.LineItem.PriceData.ProductData productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
