@@ -77,7 +77,8 @@ public class AccommodationCommandsHandler {
         AccommodationReservedEvent event = new AccommodationReservedEvent(
                 command.getReservationId(),
                 command.getAccommodationId(),
-                price
+                price,
+                command.getAccommodationName()
         );
         kafkaTemplate.send(accommodationEventsTopicName, event);
     }
@@ -88,7 +89,8 @@ public class AccommodationCommandsHandler {
                 command.getReservationId(),
                 command.getAccommodationId(),
                 command.getStartDate(),
-                command.getEndDate()
+                command.getEndDate(),
+                command.getAccommodationName()
         );
         kafkaTemplate.send(accommodationEventsTopicName, failedEvent);
     }

@@ -14,4 +14,5 @@ public class AccommodationReservedEvent {
     private UUID reservationId;
     private UUID accommodationId;
     private BigDecimal price;
+    private String accommodationName;
 }

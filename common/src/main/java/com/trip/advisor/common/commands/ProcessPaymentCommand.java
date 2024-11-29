@@ -14,4 +14,5 @@ public class ProcessPaymentCommand {
     private UUID reservationId;
     private UUID accommodationId;
     private BigDecimal reservationPrice;
+    private String accommodationName;
 }

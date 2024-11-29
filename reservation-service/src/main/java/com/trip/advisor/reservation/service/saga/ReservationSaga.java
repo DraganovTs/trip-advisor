@@ -54,7 +54,8 @@ public class ReservationSaga {
         ProcessPaymentCommand command = new ProcessPaymentCommand(
                 event.getReservationId(),
                 event.getAccommodationId(),
-                event.getPrice()
+                event.getPrice(),
+                event.getAccommodationName()
         );
 
         kafkaTemplate.send(paymentsCommandTopicName, command);

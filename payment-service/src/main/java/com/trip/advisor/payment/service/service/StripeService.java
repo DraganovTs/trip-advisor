@@ -4,12 +4,10 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
-import com.trip.advisor.payment.service.model.dto.PaymentRequest;
+import com.trip.advisor.common.model.dto.StripePaymentRequest;
 import com.trip.advisor.payment.service.model.dto.StripeResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 @Service
 public class StripeService {
@@ -20,7 +18,7 @@ public class StripeService {
     @Value("${stripe.secretKey}")
     private String secret;
 
-    public StripeResponse checkoutPayment(PaymentRequest request) throws StripeException {
+    public StripeResponse checkoutPayment(StripePaymentRequest request) throws StripeException {
         Stripe.apiKey = secret;
 
         SessionCreateParams.LineItem.PriceData.ProductData productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
