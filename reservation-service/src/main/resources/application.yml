@@ -41,4 +41,5 @@ topics:
   accommodationCommands: accommodation-commands
   accommodationEvents: accommodation-events
   paymentCommands: payments-command
+  paymentEvents: payments-events
   messageCommand: message-command

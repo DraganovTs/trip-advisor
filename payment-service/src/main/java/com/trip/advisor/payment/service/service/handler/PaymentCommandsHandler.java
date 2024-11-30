@@ -15,7 +15,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-@KafkaListener(topics = "${topics.paymentsCommand}")
+@KafkaListener(topics = "${topics.paymentCommands}")
 public class PaymentCommandsHandler {
 
     private final PaymentService paymentService;

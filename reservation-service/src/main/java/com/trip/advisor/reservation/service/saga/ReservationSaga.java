@@ -15,7 +15,8 @@ import java.util.UUID;
 
 @Component
 @KafkaListener(topics = {"${topics.reservationEvent}",
-        "${topics.accommodationEvents}"})
+        "${topics.accommodationEvents}" ,
+                "${topics.paymentEvents}"})
 public class ReservationSaga {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -34,7 +35,9 @@ public class ReservationSaga {
         this.reservationHistoryService = reservationHistoryService;
         this.paymentsCommandTopicName = paymentsCommandTopicName;
         this.messagesCommandTopicName = messagesCommandTopicName;
+
     }
+
 
     @KafkaHandler
     public void handleEvent(@Payload ReservationCreatedEvent event) {
@@ -103,6 +106,7 @@ public class ReservationSaga {
     }
 
 
+    @KafkaHandler
     private void sendFailMessageToUser(UUID accommodationId, UUID reservationId, UUID userId) {
 
         FailedReservationMessageEvent failedReservationMessageEvent =

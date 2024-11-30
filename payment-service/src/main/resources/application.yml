@@ -39,5 +39,5 @@ stripe:
   remoteServiceUrl: http://localhost:8084
 
 topics:
-  paymentsCommand: payments-commands
+  paymentCommands: paymentsCommand
   paymentsEvent: payments-events
