@@ -4,6 +4,8 @@ import com.trip.advisor.common.commands.*;
 import com.trip.advisor.common.events.*;
 import com.trip.advisor.reservation.service.model.enums.ReservationStatus;
 import com.trip.advisor.reservation.service.service.ReservationHistoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,8 +17,8 @@ import java.util.UUID;
 
 @Component
 @KafkaListener(topics = {"${topics.reservationEvent}",
-        "${topics.accommodationEvents}" ,
-                "${topics.paymentEvents}"})
+        "${topics.accommodationEvents}",
+        "payments-events"})
 public class ReservationSaga {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -24,6 +26,7 @@ public class ReservationSaga {
     private final String accommodationCommandTopicName;
     private final String paymentsCommandTopicName;
     private final String messagesCommandTopicName;
+    private final static Logger logger = LoggerFactory.getLogger(ReservationSaga.class);
 
     public ReservationSaga(KafkaTemplate<String, Object> kafkaTemplate,
                            ReservationHistoryService reservationHistoryService,
@@ -41,6 +44,7 @@ public class ReservationSaga {
 
     @KafkaHandler
     public void handleEvent(@Payload ReservationCreatedEvent event) {
+        logger.info("******************** ReservationCreatedEvent: ");
         ReserveAccommodationCommand command = new ReserveAccommodationCommand(
                 event.getAccommodationId(),
                 event.getUserId(),
@@ -51,6 +55,7 @@ public class ReservationSaga {
                 event.getUserEmail()
         );
 
+        logger.info("******************** send ReserveAccommodationCommand");
         kafkaTemplate.send(accommodationCommandTopicName, command);
 
         reservationHistoryService.add(event.getReservationId(), ReservationStatus.CREATED);
@@ -58,6 +63,7 @@ public class ReservationSaga {
 
     @KafkaHandler
     public void handleEvent(@Payload AccommodationReservedEvent event) {
+        logger.info(" ********************handle AccommodationReservedEvent");
         ProcessPaymentCommand command = new ProcessPaymentCommand(
                 event.getReservationId(),
                 event.getAccommodationId(),
@@ -67,12 +73,13 @@ public class ReservationSaga {
                 event.getStartDate(),
                 event.getEndDate()
         );
-
+        logger.info(" ********************created ProcessPaymentCommand");
         kafkaTemplate.send(paymentsCommandTopicName, command);
     }
 
     @KafkaHandler
     public void handleEvent(@Payload PaymentProcessedEvent event) {
+        logger.info("********************handle PaymentProcessedEvent");
         ApproveReservationCommand approveReservationCommand = new ApproveReservationCommand(
                 event.getReservationId(),
                 event.getAccommodationName());
@@ -82,7 +89,7 @@ public class ReservationSaga {
 
     @KafkaHandler
     public void handleEvent(@Payload AccommodationReservationFailedEvent event) {
-
+        logger.info("********************handle AccommodationReservationFailedEvent");
         reservationHistoryService.add(event.getReservationId(), ReservationStatus.REJECTED);
         sendFailMessageToUser(event.getAccommodationId(), event.getReservationId(), event.getUserId());
     }
@@ -90,6 +97,7 @@ public class ReservationSaga {
 
     @KafkaHandler
     public void handleEvent(@Payload PaymentFailedEvent event) {
+        logger.info("********************handle PaymentFailedEvent");
         CancelAccommodationReservationCommand cancelReservationCommand = new CancelAccommodationReservationCommand(
                 event.getAccommodationId(),
                 event.getReservationId(),
@@ -102,13 +110,14 @@ public class ReservationSaga {
 
     @KafkaHandler
     public void handleEvent(@Payload CancelAccommodationReservationCommand command) {
+        logger.info("********************handle CancelAccommodationReservationCommand");
         reservationHistoryService.add(command.getReservationId(), ReservationStatus.REJECTED);
     }
 
 
     @KafkaHandler
     private void sendFailMessageToUser(UUID accommodationId, UUID reservationId, UUID userId) {
-
+        logger.info("********************send FailMessageToUser");
         FailedReservationMessageEvent failedReservationMessageEvent =
                 new FailedReservationMessageEvent(
                         accommodationId,

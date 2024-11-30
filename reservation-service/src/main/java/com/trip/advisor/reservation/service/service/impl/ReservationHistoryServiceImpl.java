@@ -31,7 +31,7 @@ public class ReservationHistoryServiceImpl implements ReservationHistoryService 
     }
 
     @Override
-    public List<ReservationHistory> getReservationHistory(UUID reservationId) {
-        return List.of();
+    public List<ReservationHistory> getReservationHistory() {
+        return reservationHistoryRepository.findAll();
     }
 }

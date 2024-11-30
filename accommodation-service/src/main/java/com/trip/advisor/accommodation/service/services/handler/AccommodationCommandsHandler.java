@@ -46,6 +46,7 @@ public class AccommodationCommandsHandler {
     @Transactional
     public void handleCommand(@Payload ReserveAccommodationCommand command) {
         try {
+            logger.info(" ******************** Handling command ReserveAccommodationCommand ********************");
             reservationService.checkIfIsAlreadyReserved(
                     command.getStartDate(),
                     command.getEndDate(),
@@ -72,7 +73,7 @@ public class AccommodationCommandsHandler {
     @KafkaHandler
     @Transactional
     public void handleCommand(@Payload CancelAccommodationReservationCommand command) {
-
+        logger.info("******************** handle CancelAccommodationReservationCommand");
         Reservation reservation = reservationService.findReservationByAccIdStartAndEndDate(
                 command.getAccommodationId(),
                 command.getStartDate(),
@@ -89,6 +90,7 @@ public class AccommodationCommandsHandler {
     }
 
     private void publishAccommodationReservedEvent(ReserveAccommodationCommand command, BigDecimal price, String accommodationName) {
+        logger.info("******************** Publishing ReserveAccommodationCommand accommodation");
         AccommodationReservedEvent event = new AccommodationReservedEvent(
                 command.getReservationId(),
                 command.getUserId(),
@@ -102,7 +104,7 @@ public class AccommodationCommandsHandler {
     }
 
     private void handleReservationFailure(ReserveAccommodationCommand command, String reason) {
-        logger.warn("Reservation failed for accommodation {}: {}", command.getAccommodationId(), reason);
+        logger.warn("******************** Reservation failed for accommodation {}: {}", command.getAccommodationId(), reason);
         AccommodationReservationFailedEvent failedEvent = new AccommodationReservationFailedEvent(
                 command.getReservationId(),
                 command.getAccommodationId(),

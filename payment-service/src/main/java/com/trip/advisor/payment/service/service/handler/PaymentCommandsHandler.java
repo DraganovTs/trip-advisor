@@ -15,7 +15,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-@KafkaListener(topics = "${topics.paymentCommands}")
+@KafkaListener(topics = "payments-command")
 public class PaymentCommandsHandler {
 
     private final PaymentService paymentService;
@@ -25,7 +25,7 @@ public class PaymentCommandsHandler {
 
     public PaymentCommandsHandler(PaymentService paymentService,
                                   KafkaTemplate<String, Object> kafkaTemplate,
-                                  @Value("${topics.paymentsEvent}") String paymentsEventTopicName) {
+                                  @Value("payments-events") String paymentsEventTopicName) {
         this.paymentService = paymentService;
         this.kafkaTemplate = kafkaTemplate;
         this.paymentsEventTopicName = paymentsEventTopicName;
@@ -34,7 +34,9 @@ public class PaymentCommandsHandler {
     @KafkaHandler
     public void handleCommand(@Payload ProcessPaymentCommand command) {
 
+        logger.info("******************** Handling command: ");
         try {
+            logger.info("******************** Handling command: ProcessPaymentCommand ");
             PaymentDTO paymentDTO = PaymentDTO.builder()
                     .accommodationId(command.getAccommodationId())
                     .reservationId(command.getReservationId())
@@ -49,11 +51,12 @@ public class PaymentCommandsHandler {
                     processedPayment.getId(),
                     command.getAccommodationName()
             );
-            kafkaTemplate.send(paymentsEventTopicName, paymentProcessedEvent);
+            logger.info("******************** sending command paymentProcessedEvent");
+            kafkaTemplate.send("payments-events", paymentProcessedEvent);
 
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage(), e);
-
+            logger.info(" ******************** sending command paymentFailedEvent");
             PaymentFailedEvent paymentFailedEvent = new PaymentFailedEvent(
                     command.getReservationId(),
                     command.getAccommodationId(),
@@ -63,7 +66,7 @@ public class PaymentCommandsHandler {
                     command.getEndDate()
             );
 
-            kafkaTemplate.send(paymentsEventTopicName, paymentFailedEvent);
+            kafkaTemplate.send("payments-events", paymentFailedEvent);
         }
     }
 }

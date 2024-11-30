@@ -8,11 +8,12 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-@KafkaListener(topics = "${topic.messageCommand}")
+@KafkaListener(topics = "message-command")
 public class MessageEventHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageEventHandler.class);
 
+    @KafkaListener
     public void handleEvent(@Payload FailedReservationMessageEvent event) {
         logger.info(event.toString());
     }

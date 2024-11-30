@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface ReservationHistoryService {
     void add(UUID reservationId, ReservationStatus reservationStatus);
 
-    List<ReservationHistory> getReservationHistory(UUID reservationId);
+    List<ReservationHistory> getReservationHistory();
 }
