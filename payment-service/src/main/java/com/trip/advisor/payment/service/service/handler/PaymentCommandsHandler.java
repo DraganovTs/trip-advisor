@@ -25,7 +25,7 @@ public class PaymentCommandsHandler {
 
     public PaymentCommandsHandler(PaymentService paymentService,
                                   KafkaTemplate<String, Object> kafkaTemplate,
-                                  @Value("payments-events") String paymentsEventTopicName) {
+                                  @Value("${topics.paymentsEvent}") String paymentsEventTopicName) {
         this.paymentService = paymentService;
         this.kafkaTemplate = kafkaTemplate;
         this.paymentsEventTopicName = paymentsEventTopicName;
@@ -34,7 +34,7 @@ public class PaymentCommandsHandler {
     @KafkaHandler
     public void handleCommand(@Payload ProcessPaymentCommand command) {
 
-        logger.info("******************** Handling command: ");
+
         try {
             logger.info("******************** Handling command: ProcessPaymentCommand ");
             PaymentDTO paymentDTO = PaymentDTO.builder()
@@ -54,7 +54,7 @@ public class PaymentCommandsHandler {
                     processedPayment.getUserId()
             );
             logger.info("******************** sending command paymentProcessedEvent");
-            kafkaTemplate.send("payments-events", paymentProcessedEvent);
+            kafkaTemplate.send(paymentsEventTopicName, paymentProcessedEvent);
 
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage(), e);
@@ -68,7 +68,7 @@ public class PaymentCommandsHandler {
                     command.getEndDate()
             );
 
-            kafkaTemplate.send("payments-events", paymentFailedEvent);
+            kafkaTemplate.send(paymentsEventTopicName, paymentFailedEvent);
         }
     }
 }

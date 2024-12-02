@@ -49,6 +49,7 @@
         <spring.kafka.version>3.2.4</spring.kafka.version>
         <spring.boot.starter.thymeleaf.version>3.2.0</spring.boot.starter.thymeleaf.version>
         <stripe.java.version>26.5.1</stripe.java.version>
+        <spring.boot.starter.mail.version>3.2.1</spring.boot.starter.mail.version>
     </properties>
 
     <dependencyManagement>
@@ -198,6 +199,11 @@
                 <groupId>com.stripe</groupId>
                 <artifactId>stripe-java</artifactId>
                 <version>${stripe.java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-mail</artifactId>
+                <version>${spring.boot.starter.mail.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

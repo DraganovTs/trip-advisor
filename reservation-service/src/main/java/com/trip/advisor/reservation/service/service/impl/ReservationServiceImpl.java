@@ -1,6 +1,7 @@
 package com.trip.advisor.reservation.service.service.impl;
 
 import com.trip.advisor.common.events.ReservationCreatedEvent;
+import com.trip.advisor.common.model.dto.ReservationStatus;
 import com.trip.advisor.reservation.service.mapper.ReservationMapper;
 import com.trip.advisor.reservation.service.model.dto.CreateReservationRequestDTO;
 import com.trip.advisor.common.model.dto.CreateReservationResponseDTO;
@@ -10,6 +11,7 @@ import com.trip.advisor.reservation.service.service.ReservationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.UUID;
 
@@ -24,7 +26,7 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationServiceImpl(ReservationMapper reservationMapper,
                                   ReservationRepository reservationRepository,
                                   KafkaTemplate<String, Object> kafkaTemplate,
-                               @Value("${topics.reservationEvent}") String reservationEventTopicName) {
+                                  @Value("${topics.reservationEvent}") String reservationEventTopicName) {
         this.reservationMapper = reservationMapper;
         this.reservationRepository = reservationRepository;
         this.kafkaTemplate = kafkaTemplate;
@@ -53,12 +55,18 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void approveReservation(UUID reservationId) {
-
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+        Assert.notNull(reservation, "No reservation is found whit id " + reservationId + " in the database table");
+        reservation.setReservationStatus(ReservationStatus.APPROVED);
+        reservationRepository.save(reservation);
     }
 
     @Override
     public void rejectReservation(UUID reservationId) {
-
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+        Assert.notNull(reservation, "No reservation is found whit id " + reservationId + " in the database table");
+        reservation.setReservationStatus(ReservationStatus.REJECTED);
+        reservationRepository.save(reservation);
     }
 
     @Override

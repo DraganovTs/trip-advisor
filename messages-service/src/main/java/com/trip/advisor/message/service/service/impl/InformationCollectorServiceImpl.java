@@ -2,6 +2,7 @@ package com.trip.advisor.message.service.service.impl;
 
 import com.trip.advisor.common.model.dto.AccommodationDTO;
 import com.trip.advisor.common.model.dto.CreateReservationResponseDTO;
+import com.trip.advisor.message.service.model.dto.EmailDTO;
 import com.trip.advisor.message.service.service.InformationCollectorService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -25,18 +26,21 @@ public class InformationCollectorServiceImpl implements InformationCollectorServ
     }
 
     @Override
-    public void fetchData(UUID accommodationId, UUID reservationId, UUID userId) {
+    public EmailDTO fetchData(UUID accommodationId, UUID reservationId, UUID userId) {
 
         CompletableFuture<AccommodationDTO> accommodationFuture = getAccommodationById(accommodationId);
         CompletableFuture<CreateReservationResponseDTO> reservationFuture = getReservationById(reservationId);
         //TODO user service and call for user info
 
-        CompletableFuture.allOf(accommodationFuture,reservationFuture).join();
+        CompletableFuture.allOf(accommodationFuture, reservationFuture).join();
 
         AccommodationDTO accommodationDTO = accommodationFuture.join();
         System.out.println("Fetched Accommodation: " + accommodationDTO);
-        CreateReservationResponseDTO reservationResponseDTO  = reservationFuture.join();
+        CreateReservationResponseDTO reservationResponseDTO = reservationFuture.join();
         System.out.println("Fetched Reservation: " + reservationResponseDTO);
+
+        //TODO create mapper
+        return new EmailDTO();
     }
 
 

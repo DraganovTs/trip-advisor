@@ -1,8 +1,10 @@
 package com.trip.advisor.message.service.service;
 
+import com.trip.advisor.message.service.model.dto.EmailDTO;
+
 import java.util.UUID;
 
 public interface InformationCollectorService {
 
-    public void fetchData(UUID accommodationId, UUID reservationId, UUID userId);
+     EmailDTO fetchData(UUID accommodationId, UUID reservationId, UUID userId);
 }
