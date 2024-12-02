@@ -2,8 +2,8 @@ package com.trip.advisor.accommodation.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trip.advisor.accommodation.service.constants.AccommodationConstants;
-import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
-import com.trip.advisor.accommodation.service.model.dto.AddressDTO;
+import com.trip.advisor.common.model.dto.AccommodationDTO;
+import com.trip.advisor.common.model.dto.AddressDTO;
 import com.trip.advisor.accommodation.service.services.impl.AccommodationServiceImpl;
 import com.trip.advisor.common.constants.Constants;
 import org.junit.jupiter.api.Test;

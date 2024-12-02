@@ -2,8 +2,8 @@ package com.trip.advisor.accommodation.service.service;
 
 
 import com.trip.advisor.accommodation.service.exception.AccommodationAlreadyExistException;
-import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
-import com.trip.advisor.accommodation.service.model.dto.AddressDTO;
+import com.trip.advisor.common.model.dto.AccommodationDTO;
+import com.trip.advisor.common.model.dto.AddressDTO;
 import com.trip.advisor.accommodation.service.model.entity.Accommodation;
 import com.trip.advisor.accommodation.service.model.entity.Address;
 import com.trip.advisor.accommodation.service.model.enums.AccommodationType;

@@ -2,7 +2,7 @@ package com.trip.advisor.accommodation.service.services.impl;
 
 import com.trip.advisor.accommodation.service.exception.ReservationOverlapping;
 import com.trip.advisor.accommodation.service.mapper.AccommodationMapper;
-import com.trip.advisor.accommodation.service.model.dto.ReservationDTO;
+import com.trip.advisor.common.model.dto.ReservationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.repository.ReservationRepository;
 import com.trip.advisor.accommodation.service.services.ReservationService;

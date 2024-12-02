@@ -1,6 +1,6 @@
 package com.trip.advisor.accommodation.service.services;
 
-import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
+import com.trip.advisor.common.model.dto.AccommodationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Accommodation;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,4 +55,6 @@ public interface AccommodationService {
     boolean deleteAccommodation(String name,String city, String street);
 
     Accommodation getAccommodationById(UUID accommodationId);
+
+    AccommodationDTO getAccommodationDTOById(UUID id);
 }

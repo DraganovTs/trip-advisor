@@ -4,7 +4,7 @@ import com.trip.advisor.accommodation.service.exception.AccommodationAlreadyExis
 import com.trip.advisor.accommodation.service.model.enums.AccommodationType;
 import com.trip.advisor.common.exception.ResourceNotFoundException;
 import com.trip.advisor.accommodation.service.mapper.AccommodationMapper;
-import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
+import com.trip.advisor.common.model.dto.AccommodationDTO;
 import com.trip.advisor.accommodation.service.model.entity.Accommodation;
 import com.trip.advisor.accommodation.service.model.entity.Reservation;
 import com.trip.advisor.accommodation.service.repository.AccommodationRepository;
@@ -23,10 +23,12 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
     private final ReservationService reservationService;
+    private final AccommodationMapper accommodationMapper;
 
-    public AccommodationServiceImpl(AccommodationRepository accommodationRepository, ReservationService reservationService) {
+    public AccommodationServiceImpl(AccommodationRepository accommodationRepository, ReservationService reservationService, AccommodationMapper accommodationMapper) {
         this.accommodationRepository = accommodationRepository;
         this.reservationService = reservationService;
+        this.accommodationMapper = accommodationMapper;
     }
 
     /**
@@ -146,6 +148,13 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public Accommodation getAccommodationById(UUID accommodationId) {
         return accommodationRepository.findByAccommodationId(accommodationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Accommodation", "accommodationId",
+                        accommodationId.toString()));
+    }
+
+    @Override
+    public AccommodationDTO getAccommodationDTOById(UUID accommodationId) {
+        return accommodationRepository.findByAccommodationId(accommodationId).map(AccommodationMapper::mapAccommodationToAccommodationDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Accommodation", "accommodationId",
                         accommodationId.toString()));
     }

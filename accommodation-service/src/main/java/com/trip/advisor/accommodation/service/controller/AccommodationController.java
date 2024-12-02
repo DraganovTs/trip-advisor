@@ -2,7 +2,7 @@ package com.trip.advisor.accommodation.service.controller;
 
 import com.trip.advisor.accommodation.service.constants.AccommodationConstants;
 import com.trip.advisor.accommodation.service.model.dto.AccommodationContactInfoDTO;
-import com.trip.advisor.accommodation.service.model.dto.AccommodationDTO;
+import com.trip.advisor.common.model.dto.AccommodationDTO;
 import com.trip.advisor.common.constants.Constants;
 import com.trip.advisor.common.model.dto.ErrorResponseDTO;
 import com.trip.advisor.common.model.dto.ResponseDTO;
@@ -24,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(
         name = "CRUD REST API for Accommodations in TripAdvisor",
@@ -85,6 +86,12 @@ public class AccommodationController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(accommodationDTO);
+    }
+
+    @GetMapping("fetch/accommodationId")
+    public AccommodationDTO getAccommodationById(@RequestParam UUID accommodationId) {
+        return accommodationService.getAccommodationDTOById(accommodationId);
+
     }
 
     @Operation(
@@ -160,7 +167,7 @@ public class AccommodationController {
     }
 
     @GetMapping("/build-info")
-    public ResponseEntity<String>getBuildVersion() {
+    public ResponseEntity<String> getBuildVersion() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(buildVersion);
