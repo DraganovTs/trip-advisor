@@ -11,7 +11,7 @@ import org.springframework.kafka.core.ProducerFactory;
 @Configuration
 public class KafkaConfig {
 
-    @Value("payments-events")
+    @Value("${topics.paymentCommands}")
     private String paymentsEventsTopicName;
     private final static Integer TOPIC_REPLICATION_FACTOR = 3;
     private final static Integer TOPIC_PARTITIONS = 3;
@@ -24,7 +24,7 @@ public class KafkaConfig {
     @Bean
     NewTopic createPaymentsEventsTopic() {
         return TopicBuilder
-                .name("payments-events")
+                .name(paymentsEventsTopicName)
                 .partitions(TOPIC_PARTITIONS)
                 .replicas(TOPIC_REPLICATION_FACTOR)
                 .build();

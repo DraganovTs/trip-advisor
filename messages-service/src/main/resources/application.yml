@@ -24,4 +24,4 @@ spring:
       auto-offset-reset: earliest
 
 topic:
-  messageCommand: message-command
+  messageCommand: "message-command"

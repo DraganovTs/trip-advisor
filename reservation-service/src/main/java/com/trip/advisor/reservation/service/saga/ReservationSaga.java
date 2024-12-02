@@ -18,7 +18,7 @@ import java.util.UUID;
 @Component
 @KafkaListener(topics = {"${topics.reservationEvent}",
         "${topics.accommodationEvents}",
-        "payments-events"})
+        "${topics.paymentEvents}"})
 public class ReservationSaga {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -84,6 +84,7 @@ public class ReservationSaga {
                 event.getReservationId(),
                 event.getAccommodationName());
         reservationHistoryService.add(event.getReservationId(), ReservationStatus.APPROVED);
+        logger.info("********************send ApproveReservationCommand");
         kafkaTemplate.send(messagesCommandTopicName, approveReservationCommand);
     }
 
