@@ -24,5 +24,7 @@ public class Payment {
     private UUID accommodationId;
     @Column(name = "accommodation_price")
     private BigDecimal price;
+    @Column(name = "user_id")
+    private UUID userId;
 
 }

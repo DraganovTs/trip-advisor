@@ -12,5 +12,6 @@ import java.util.UUID;
 public class PaymentProcessedEvent {
     private UUID reservationId;
     private UUID paymentId;
-    private String accommodationName;
+    private UUID accommodationId;
+    private UUID userId;
 }

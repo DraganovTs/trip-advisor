@@ -13,6 +13,7 @@ public class PaymentMapper {
                 .accommodationId(payment.getAccommodationId())
                 .reservationId(payment.getReservationId())
                 .price(payment.getPrice())
+                .userId(payment.getUserId())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class PaymentMapper {
                 .accommodationId(paymentDTO.getAccommodationId())
                 .reservationId(paymentDTO.getReservationId())
                 .price(paymentDTO.getPrice())
+                .userId(paymentDTO.getUserId())
                 .build();
     }
 }

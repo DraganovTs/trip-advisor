@@ -22,6 +22,8 @@ public class PaymentDTO {
     private UUID accommodationId;
     @NotNull(message = "price must be not null!")
     private BigDecimal price;
-    @NotNull
+    @NotNull(message = "accommodation name must not be null!")
     private String accommodationName;
+    @NotNull(message = "user must not be null!")
+    private UUID userId;
 }

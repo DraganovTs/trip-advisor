@@ -2,7 +2,7 @@ package com.trip.advisor.reservation.service.saga;
 
 import com.trip.advisor.common.commands.*;
 import com.trip.advisor.common.events.*;
-import com.trip.advisor.reservation.service.model.enums.ReservationStatus;
+import com.trip.advisor.common.model.dto.ReservationStatus;
 import com.trip.advisor.reservation.service.service.ReservationHistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +82,8 @@ public class ReservationSaga {
         logger.info("********************handle PaymentProcessedEvent");
         ApproveReservationCommand approveReservationCommand = new ApproveReservationCommand(
                 event.getReservationId(),
-                event.getAccommodationName());
+                event.getAccommodationId(),
+                event.getUserId());
         reservationHistoryService.add(event.getReservationId(), ReservationStatus.APPROVED);
         logger.info("********************send ApproveReservationCommand");
         kafkaTemplate.send(messagesCommandTopicName, approveReservationCommand);

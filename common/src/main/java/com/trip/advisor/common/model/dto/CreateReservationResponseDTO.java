@@ -1,6 +1,5 @@
-package com.trip.advisor.reservation.service.model.dto;
+package com.trip.advisor.common.model.dto;
 
-import com.trip.advisor.reservation.service.model.enums.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,9 +1,9 @@
 package com.trip.advisor.reservation.service.mapper;
 
 import com.trip.advisor.reservation.service.model.dto.CreateReservationRequestDTO;
-import com.trip.advisor.reservation.service.model.dto.CreateReservationResponseDTO;
+import com.trip.advisor.common.model.dto.CreateReservationResponseDTO;
 import com.trip.advisor.reservation.service.model.entity.Reservation;
-import com.trip.advisor.reservation.service.model.enums.ReservationStatus;
+import com.trip.advisor.common.model.dto.ReservationStatus;
 import org.springframework.stereotype.Component;
 
 @Component

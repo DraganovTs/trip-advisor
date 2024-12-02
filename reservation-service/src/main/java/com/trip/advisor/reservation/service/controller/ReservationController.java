@@ -1,7 +1,7 @@
 package com.trip.advisor.reservation.service.controller;
 
 import com.trip.advisor.reservation.service.model.dto.CreateReservationRequestDTO;
-import com.trip.advisor.reservation.service.model.dto.CreateReservationResponseDTO;
+import com.trip.advisor.common.model.dto.CreateReservationResponseDTO;
 import com.trip.advisor.reservation.service.model.entity.ReservationHistory;
 import com.trip.advisor.reservation.service.service.ReservationHistoryService;
 import com.trip.advisor.reservation.service.service.ReservationService;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -31,6 +32,11 @@ public class ReservationController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @GetMapping("/reservationId")
+    public CreateReservationResponseDTO getReservationById(@RequestParam UUID reservationId) {
+       return reservationService.getReservationById(reservationId);
     }
 
     @GetMapping

@@ -11,5 +11,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ApproveReservationCommand {
     private UUID reservationId;
-    private String accommodationName;
+    private UUID accommodationId;
+    private UUID userId;
 }

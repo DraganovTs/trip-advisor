@@ -42,6 +42,7 @@ public class PaymentCommandsHandler {
                     .reservationId(command.getReservationId())
                     .price(command.getReservationPrice())
                     .accommodationName(command.getAccommodationName())
+                    .userId(command.getUserId())
                     .build();
 
             PaymentDTO processedPayment = paymentService.process(paymentDTO);
@@ -49,7 +50,8 @@ public class PaymentCommandsHandler {
             PaymentProcessedEvent paymentProcessedEvent = new PaymentProcessedEvent(
                     processedPayment.getReservationId(),
                     processedPayment.getId(),
-                    command.getAccommodationName()
+                    processedPayment.getAccommodationId(),
+                    processedPayment.getUserId()
             );
             logger.info("******************** sending command paymentProcessedEvent");
             kafkaTemplate.send("payments-events", paymentProcessedEvent);

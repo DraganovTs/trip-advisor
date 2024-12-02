@@ -1,6 +1,6 @@
 package com.trip.advisor.reservation.service.model.entity;
 
-import com.trip.advisor.reservation.service.model.enums.ReservationStatus;
+import com.trip.advisor.common.model.dto.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

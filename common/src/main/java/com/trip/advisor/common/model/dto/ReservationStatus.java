@@ -1,4 +1,4 @@
-package com.trip.advisor.reservation.service.model.enums;
+package com.trip.advisor.common.model.dto;
 
 public enum ReservationStatus {
     CREATED,

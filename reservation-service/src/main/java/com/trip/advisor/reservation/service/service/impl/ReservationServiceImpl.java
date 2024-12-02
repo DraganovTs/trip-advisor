@@ -3,7 +3,7 @@ package com.trip.advisor.reservation.service.service.impl;
 import com.trip.advisor.common.events.ReservationCreatedEvent;
 import com.trip.advisor.reservation.service.mapper.ReservationMapper;
 import com.trip.advisor.reservation.service.model.dto.CreateReservationRequestDTO;
-import com.trip.advisor.reservation.service.model.dto.CreateReservationResponseDTO;
+import com.trip.advisor.common.model.dto.CreateReservationResponseDTO;
 import com.trip.advisor.reservation.service.model.entity.Reservation;
 import com.trip.advisor.reservation.service.repository.ReservationRepository;
 import com.trip.advisor.reservation.service.service.ReservationService;
@@ -59,5 +59,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void rejectReservation(UUID reservationId) {
 
+    }
+
+    @Override
+    public CreateReservationResponseDTO getReservationById(UUID reservationId) {
+        return reservationMapper.mapReservationToReservationResponse(reservationRepository.findById(reservationId).get());
     }
 }

@@ -1,7 +1,7 @@
 package com.trip.advisor.reservation.service.service;
 
 import com.trip.advisor.reservation.service.model.dto.CreateReservationRequestDTO;
-import com.trip.advisor.reservation.service.model.dto.CreateReservationResponseDTO;
+import com.trip.advisor.common.model.dto.CreateReservationResponseDTO;
 
 import java.util.UUID;
 
@@ -12,4 +12,6 @@ public interface ReservationService {
     void approveReservation(UUID reservationId);
 
     void rejectReservation(UUID reservationId);
+
+    CreateReservationResponseDTO getReservationById(UUID reservationId);
 }

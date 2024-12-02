@@ -1,7 +1,7 @@
 package com.trip.advisor.reservation.service.service.impl;
 
 import com.trip.advisor.reservation.service.model.entity.ReservationHistory;
-import com.trip.advisor.reservation.service.model.enums.ReservationStatus;
+import com.trip.advisor.common.model.dto.ReservationStatus;
 import com.trip.advisor.reservation.service.repository.ReservationHistoryRepository;
 import com.trip.advisor.reservation.service.service.ReservationHistoryService;
 import org.springframework.stereotype.Service;
