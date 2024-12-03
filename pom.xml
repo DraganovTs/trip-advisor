@@ -28,6 +28,7 @@
         <module>payment-service</module>
         <module>stripe-service</module>
         <module>messages-service</module>
+        <module>user-service</module>
     </modules>
 
     <properties>
