@@ -20,8 +20,8 @@ public class Privilege {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private EPrivilege name;
+
+    private String name;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "privileges")
